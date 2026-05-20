@@ -64,7 +64,7 @@ a { color: inherit; }
   justify-content: center;
   /* Fallback if the <video> never paints (network, codec, etc.) */
   background-color: #000;
-  background-image: url("assets/images/IMG_1980.jpeg");
+  background-image: url("IMG_1980.jpeg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
