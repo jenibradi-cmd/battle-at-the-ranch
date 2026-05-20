@@ -1,0 +1,437 @@
+/* ==============================================================
+   BATTLE AT THE RANCH — landing page styles
+   Dark. Cinematic. Patriotic. Tactical. Built mobile-first.
+   ============================================================== */
+
+:root {
+  /* Palette pulled from the invitation: deep blacks, weathered
+     cream, muted patriotic red, smoky navy, smoke gray. */
+  --bg:          #000000;
+  --bg-2:        #0a0a0c;
+  --bg-3:        #111114;
+  --ink:         #ece7d8;        /* weathered cream */
+  --ink-dim:     rgba(236, 231, 216, 0.62);
+  --ink-faint:   rgba(236, 231, 216, 0.30);
+  --rule:        rgba(236, 231, 216, 0.18);
+  --red:         #8b1a1a;        /* muted flag red */
+  --red-deep:    #5e1010;
+  --navy:        #1a2940;
+  --smoke:       rgba(0, 0, 0, 0.55);
+
+  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --maxw: 1100px;
+  --maxw-narrow: 760px;
+}
+
+/* ---------- Reset / base ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img, video { display: block; max-width: 100%; }
+a { color: inherit; }
+
+.container        { max-width: var(--maxw);        margin: 0 auto; padding: 0 1.5rem; }
+.container--narrow { max-width: var(--maxw-narrow); margin: 0 auto; padding: 0 1.5rem; }
+
+/* ==============================================================
+   1. HERO
+   ============================================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;  /* iOS — accounts for dynamic browser chrome */
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Fallback if the <video> never paints (network, codec, etc.) */
+  background-color: #000;
+  background-image: url("assets/images/IMG_1980.jpeg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  /* Subtle stillness — let the smoke breathe */
+  filter: saturate(0.85) contrast(1.05);
+}
+
+/* Dark gradient overlay — cinematic vignette */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.65) 55%,
+      rgba(0, 0, 0, 0.92) 100%),
+    linear-gradient(180deg,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.25) 35%,
+      rgba(0, 0, 0, 0.45) 70%,
+      rgba(0, 0, 0, 0.95) 100%);
+  pointer-events: none;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 6rem 1.5rem 5rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 9vw, 6.5rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  margin: 0.5rem 0 1.2rem;
+  text-transform: uppercase;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.85);
+}
+
+.hero__sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin: 0 0 2rem;
+}
+
+.hero__line {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1rem, 2.1vw, 1.35rem);
+  color: var(--ink);
+  max-width: 38ch;
+  margin: 0 auto 2.8rem;
+  line-height: 1.45;
+  opacity: 0.95;
+}
+
+/* Scroll hint at bottom of hero */
+.hero__scroll {
+  position: absolute;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 1px;
+  height: 56px;
+  background: var(--ink-faint);
+  overflow: hidden;
+}
+.hero__scroll span {
+  position: absolute;
+  top: -56px;
+  left: 0;
+  width: 100%;
+  height: 56px;
+  background: var(--ink);
+  animation: scrollHint 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes scrollHint {
+  0%   { top: -56px; }
+  60%  { top: 56px; }
+  100% { top: 56px; }
+}
+
+/* ==============================================================
+   Eyebrows, section titles, lede copy
+   ============================================================== */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin: 0 0 1.2rem;
+}
+.eyebrow--center { text-align: center; }
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin: 0 0 1.5rem;
+}
+.section__title--center { text-align: center; }
+
+.lede {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 1.5rem;
+  font-weight: 400;
+}
+
+.kicker {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: var(--ink-dim);
+  margin: 2rem 0 0;
+  letter-spacing: 0.04em;
+}
+
+/* ==============================================================
+   Buttons
+   ============================================================== */
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+.cta-row--center { justify-content: center; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 1.8rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease,
+              color 0.25s ease, border-color 0.25s ease,
+              box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 200px;
+}
+
+.btn--primary {
+  background: var(--red);
+  color: var(--ink);
+  border-color: var(--red);
+  box-shadow: 0 8px 30px rgba(139, 26, 26, 0.35);
+}
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  background: var(--red-deep);
+  border-color: var(--red-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(139, 26, 26, 0.5);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  background: var(--ink);
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+/* ==============================================================
+   2. ONE LAST MISSION
+   ============================================================== */
+.section {
+  padding: 7rem 0;
+  position: relative;
+}
+
+.section--mission {
+  background: var(--bg);
+  text-align: center;
+  border-top: 1px solid var(--rule);
+}
+.section--mission .section__title { text-align: center; }
+
+/* ==============================================================
+   3. MISSION BRIEFING
+   ============================================================== */
+.section--briefing {
+  background: var(--bg-2);
+  border-top: 1px solid var(--rule);
+  /* Soft smoke wash on both edges */
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(26, 41, 64, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(139, 26, 26, 0.18) 0%, transparent 55%);
+}
+
+.briefing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top: 3rem;
+}
+
+.card {
+  background: var(--bg-2);
+  padding: 2.2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.card__label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin: 0 0 0.3rem;
+}
+
+.card__value {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+}
+
+.card__big {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.55rem;
+  letter-spacing: 0.04em;
+}
+
+/* ==============================================================
+   4. REPORT FOR DUTY
+   ============================================================== */
+.section--rsvp {
+  background: var(--bg);
+  text-align: center;
+  border-top: 1px solid var(--rule);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(139, 26, 26, 0.22) 0%, transparent 60%);
+}
+.section--rsvp .section__title { text-align: center; }
+.section--rsvp .lede { margin-bottom: 2.5rem; }
+
+/* ==============================================================
+   FOOTER
+   ============================================================== */
+.footer {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: #000;
+  border-top: 1px solid var(--rule);
+  font-size: 0.75rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.footer p { margin: 0; }
+
+/* ==============================================================
+   Fade-in reveal
+   ============================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero contents fade in on load (no scroll required) */
+.hero .reveal { transition-delay: 0.1s; }
+.hero .reveal:nth-child(2) { transition-delay: 0.25s; }
+.hero .reveal:nth-child(3) { transition-delay: 0.45s; }
+.hero .reveal:nth-child(4) { transition-delay: 0.65s; }
+.hero .reveal:nth-child(5) { transition-delay: 0.9s; }
+
+/* Respect users who prefer no motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero__scroll span { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ==============================================================
+   Responsive
+   ============================================================== */
+@media (min-width: 560px) {
+  .briefing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .card--wide { grid-column: span 2; }
+}
+
+@media (min-width: 900px) {
+  .briefing-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .card--wide { grid-column: span 2; }
+}
+
+/* Mobile tweaks — keep the hero composed at smaller widths */
+@media (max-width: 520px) {
+  .section { padding: 5rem 0; }
+  .hero__content { padding: 5rem 1.25rem 5rem; }
+  .hero__title { letter-spacing: 0.03em; }
+  .hero__sub   { letter-spacing: 0.28em; }
+  .btn {
+    width: 100%;
+    min-width: 0;
+  }
+  .cta-row { flex-direction: column; gap: 0.75rem; }
+  .card { padding: 1.8rem 1.4rem; }
+}
