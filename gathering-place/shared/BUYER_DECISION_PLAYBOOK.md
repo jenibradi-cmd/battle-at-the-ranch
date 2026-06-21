@@ -1,7 +1,7 @@
-# STILLWATER — The Buyer's Decision Playbook
+# GATHERING PLACE — The Buyer's Decision Playbook
 ### How to choose Product A over B–G, with real makers and worked examples
 
-*Companion to `STILLWATER_STRATEGY.md`. This document teaches the actual reasoning a great buyer/curator uses when seven good options sit on the table and only one (or a deliberate few) can earn the slot. Makers below were verified via live web search in June 2026 — treat them as vetted starting points, not contracts. A reusable live-search prompt pack is at the end so you can keep this current yourself.*
+*A **shared, house-wide methodology** for every brand inside Gathering Place. The worked examples use **Stillwater** (the first brand — see `../brands/stillwater/STRATEGY.md`), but the framework, scorecard, disqualifiers, and live-search system apply to all current and future brands in the house. This document teaches the actual reasoning a great buyer/curator uses when seven good options sit on the table and only one (or a deliberate few) can earn the slot. Makers below were verified via live web search in June 2026 — treat them as vetted starting points, not contracts. A reusable live-search prompt pack is at the end so you can keep this current yourself.*
 
 ---
 
@@ -227,7 +227,7 @@ You asked for a prompt for code/live search. Run these verbatim in any web-searc
 - `"[maker name]" minimum order quantity wholesale terms private label`
 - `"[craft/region]" ethical labor audit certification fair wages`
 
-**Quarterly cadence:** run the category prompts, add 2–3 new candidates per slot to the pipeline, re-score against the rubric, sample the top one, and graduate winners to exclusivity. Discovery is a habit, not an event (see Part 4 of the strategy doc).
+**Quarterly cadence:** run the category prompts, add 2–3 new candidates per slot to the pipeline, re-score against the rubric, sample the top one, and graduate winners to exclusivity. Discovery is a habit, not an event (see Part 4 of `../brands/stillwater/STRATEGY.md`).
 
 ---
 
