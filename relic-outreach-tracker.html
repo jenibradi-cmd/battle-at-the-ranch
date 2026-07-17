@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relic Outreach Tracker</title>
+<!--
+  Relic Outreach Tracker
+  A single-file, fully local web app for tracking jewelry-manufacturer outreach.
+  - No backend. No external storage. No network requests of any kind.
+  - All data lives in memory (the `state` object below) for the session.
+  - Use "Export to JSON" to save your data to a file, and "Import from JSON"
+    to load it back. localStorage is deliberately NOT used.
+-->
+<style>
+  :root {
+    /* Warm neutral palette */
+    --bg:        #f5f1ea;
+    --panel:     #fbf8f3;
+    --panel-2:   #f0e9dd;
+    --ink:       #3b352d;
+    --ink-soft:  #6b6256;
+    --line:      #e0d6c6;
+    --line-2:    #d2c6b2;
+    --accent:    #a9714b;   /* terracotta / warm brown */
+    --accent-dk: #8a5a39;
+    --accent-bg: #efe2d4;
+    --good:      #6f8f5e;
+    --warn:      #c08a3e;
+    --shadow:    0 1px 3px rgba(80,64,44,.10), 0 6px 18px rgba(80,64,44,.06);
+    --radius:    10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+                 "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-weight: 600; letter-spacing: .2px; margin: 0; }
+  header.app {
+    padding: 20px 26px 16px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg) 100%);
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  }
+  header.app h1 { font-size: 24px; color: var(--accent-dk); }
+  header.app .sub { color: var(--ink-soft); font-size: 13.5px; }
+  .toolbar {
+    margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .wrap { padding: 18px 26px 60px; max-width: 1500px; margin: 0 auto; }
+
+  /* Buttons */
+  button, .btn {
+    font: inherit; font-size: 13.5px;
+    border: 1px solid var(--line-2);
+    background: var(--panel);
+    color: var(--ink);
+    padding: 7px 13px; border-radius: 8px; cursor: pointer;
+    transition: background .12s, border-color .12s, transform .04s;
+  }
+  button:hover, .btn:hover { background: var(--panel-2); border-color: var(--accent); }
+  button:active { transform: translateY(1px); }
+  button.primary {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  button.primary:hover { background: var(--accent-dk); border-color: var(--accent-dk); }
+  button.danger { color: #9a3b2f; }
+  button.danger:hover { background: #f5e3df; border-color: #c98a80; }
+  button.ghost { background: transparent; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .mini { padding: 4px 9px; font-size: 12.5px; border-radius: 6px; }
+
+  /* Layout: two columns */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 1080px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card > .card-head {
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .card > .card-head h2 { font-size: 16px; }
+  .card > .card-head .hint { font-size: 12px; color: var(--ink-soft); }
+  .card > .card-body { padding: 14px 16px; }
+
+  /* Table */
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td {
+    padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line);
+    white-space: nowrap; vertical-align: middle;
+  }
+  thead th {
+    position: sticky; top: 0; background: var(--panel-2); z-index: 1;
+    cursor: pointer; user-select: none; color: var(--ink-soft);
+    font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .4px;
+  }
+  thead th:hover { color: var(--accent-dk); }
+  thead th .arrow { color: var(--accent); font-size: 11px; margin-left: 3px; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: var(--accent-bg); }
+  tbody tr.selected { background: var(--accent-bg); box-shadow: inset 3px 0 0 var(--accent); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .quote-col { background: rgba(169,113,75,.05); }
+  thead th.quote-col { background: var(--accent-bg); }
+
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 600; border: 1px solid transparent;
+  }
+  .st-Not.contacted, .st-default { background: #eee6d8; color: #7a6f5d; }
+  .st-Drafted  { background: #e7eef3; color: #4d6678; }
+  .st-Sent     { background: #e9e4f3; color: #6a5a8a; }
+  .st-Replied  { background: #e3f0e0; color: #51713f; }
+  .st-Quoted   { background: #fbeccd; color: #95661f; }
+  .st-Passed   { background: #f1e2df; color: #97554a; }
+
+  .loc-tag { font-size: 11.5px; color: var(--ink-soft); }
+
+  /* Form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 3px; font-weight: 600; }
+  input, select, textarea {
+    font: inherit; font-size: 13.5px; width: 100%;
+    padding: 7px 9px; border: 1px solid var(--line-2); border-radius: 7px;
+    background: #fff; color: var(--ink);
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(169,113,75,.15);
+  }
+  textarea { resize: vertical; min-height: 60px; }
+  .row-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  /* Tabs inside the right panel */
+  .tabs { display: flex; gap: 4px; }
+  .tab {
+    padding: 6px 12px; border-radius: 7px 7px 0 0; font-size: 13px;
+    cursor: pointer; border: 1px solid transparent; color: var(--ink-soft);
+  }
+  .tab.active { background: var(--panel); border-color: var(--line); border-bottom-color: var(--panel); color: var(--accent-dk); font-weight: 600; }
+
+  .draft-box { width: 100%; min-height: 320px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.5; }
+  .template-box { min-height: 260px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; }
+
+  .merge-help { font-size: 12px; color: var(--ink-soft); margin: 8px 0 0; }
+  .merge-help code {
+    background: var(--panel-2); padding: 1px 5px; border-radius: 4px;
+    border: 1px solid var(--line); font-size: 11.5px;
+  }
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px;
+    font-size: 13.5px; box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+    transition: opacity .2s, transform .2s; z-index: 50;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+  .empty { color: var(--ink-soft); font-style: italic; padding: 18px; text-align: center; }
+  .count { color: var(--ink-soft); font-size: 12.5px; }
+  .filterbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .filterbar input[type=search] { width: 180px; }
+  .footnote { color: var(--ink-soft); font-size: 12px; margin-top: 18px; text-align: center; }
+  .privacy { color: var(--good); font-weight: 600; }
+  .selname { font-weight: 600; color: var(--accent-dk); }
+  .brief h3 { font-size: 17px; color: var(--accent-dk); }
+  .brief .brief-sub { color: var(--ink-soft); font-size: 13px; margin: 4px 0 14px; font-style: italic; }
+  .brief h4 { font-size: 12.5px; text-transform: uppercase; letter-spacing: .5px; color: var(--accent); margin: 16px 0 4px; }
+  .brief p { margin: 6px 0; font-size: 13.5px; }
+  .brief ul { margin: 6px 0; padding-left: 20px; font-size: 13.5px; }
+  .brief li { margin: 2px 0; }
+  .brief .brief-foot { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<header class="app">
+  <h1>Relic Outreach Tracker</h1>
+  <span class="sub">Jewelry manufacturer outreach &middot; 100% local</span>
+  <div class="toolbar">
+    <button class="ghost" id="btn-sample">Reset to seeded data</button>
+    <button id="btn-import">Import from JSON</button>
+    <button id="btn-export">Export to JSON</button>
+    <input type="file" id="file-input" accept="application/json,.json" hidden />
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+
+    <!-- LEFT: maker table -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Makers</h2>
+        <span class="count" id="maker-count"></span>
+        <div class="filterbar" style="margin-left:auto;">
+          <input type="search" id="search" placeholder="Search name / notes…" />
+          <select id="filter-loc">
+            <option value="">All locations</option>
+            <option value="Bali">Bali</option>
+            <option value="US">US</option>
+          </select>
+          <select id="filter-status">
+            <option value="">All statuses</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row-actions" style="margin-top:0;margin-bottom:12px;">
+          <button class="primary" id="btn-new">+ Add maker</button>
+        </div>
+        <div class="table-scroll">
+          <table id="maker-table">
+            <thead><tr id="thead-row"></tr></thead>
+            <tbody id="maker-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: editor + draft -->
+    <section class="card">
+      <div class="card-head">
+        <div class="tabs">
+          <div class="tab active" data-tab="edit">Maker details</div>
+          <div class="tab" data-tab="draft">Email draft</div>
+          <div class="tab" data-tab="template">Template</div>
+          <div class="tab" data-tab="brief">Connector brief</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <!-- EDIT TAB -->
+        <div id="tab-edit">
+          <div id="edit-empty" class="empty">Select a maker from the list, or click “+ Add maker”.</div>
+          <form id="maker-form" style="display:none;">
+            <div class="form-grid">
+              <div class="full">
+                <label>Name</label>
+                <input name="name" required placeholder="Maker / workshop name" />
+              </div>
+              <div>
+                <label>Location</label>
+                <select name="location">
+                  <option>Bali</option>
+                  <option>US</option>
+                </select>
+              </div>
+              <div>
+                <label>Status</label>
+                <select name="status" id="form-status"></select>
+              </div>
+              <div>
+                <label>Contact email</label>
+                <input name="email" type="text" placeholder="hello@maker.com" />
+              </div>
+              <div>
+                <label>Contact method</label>
+                <select name="contactMethod">
+                  <option>Email</option>
+                  <option>WhatsApp</option>
+                </select>
+              </div>
+              <div class="full">
+                <label>Website</label>
+                <input name="website" placeholder="https://…" />
+              </div>
+              <div class="full">
+                <label>Strengths</label>
+                <input name="strengths" placeholder="e.g. lost-wax casting, enamel, small-batch silver" />
+              </div>
+              <div>
+                <label>MOQ</label>
+                <input name="moq" placeholder="e.g. 100 units" />
+              </div>
+              <div>
+                <label>Prototype cost quoted</label>
+                <input name="protoCost" placeholder="e.g. $120" />
+              </div>
+              <div>
+                <label>Per-unit @ 50</label>
+                <input name="u50" class="num" placeholder="$" />
+              </div>
+              <div>
+                <label>Per-unit @ 250</label>
+                <input name="u250" class="num" placeholder="$" />
+              </div>
+              <div>
+                <label>Per-unit @ 500</label>
+                <input name="u500" class="num" placeholder="$" />
+              </div>
+              <div>
+                <label>Lead time</label>
+                <input name="leadTime" placeholder="e.g. 6–8 weeks" />
+              </div>
+              <div class="full">
+                <label>Notes</label>
+                <textarea name="notes" placeholder="Free-text notes — conversations, red flags, follow-ups…"></textarea>
+              </div>
+            </div>
+            <div class="row-actions">
+              <button type="submit" class="primary">Save</button>
+              <button type="button" class="ghost" id="btn-gen-from-edit">Generate draft →</button>
+              <button type="button" class="danger" id="btn-delete" style="margin-left:auto;">Delete</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- DRAFT TAB -->
+        <div id="tab-draft" style="display:none;">
+          <div id="draft-empty" class="empty">Select a maker to generate a personalized draft.</div>
+          <div id="draft-area" style="display:none;">
+            <p class="merge-help">Draft for <span class="selname" id="draft-for"></span>. Edit freely below, then copy. <strong>Nothing is sent</strong> — paste it into your own email client.</p>
+            <textarea class="draft-box" id="draft-text"></textarea>
+            <div class="row-actions">
+              <button class="primary" id="btn-copy">Copy draft</button>
+              <button class="ghost" id="btn-regen">Re-generate from template</button>
+              <span id="unfilled-warn" class="merge-help" style="margin-left:auto;"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEMPLATE TAB -->
+        <div id="tab-template" style="display:none;">
+          <label>Master email template</label>
+          <textarea class="template-box" id="template-text"></textarea>
+          <p class="merge-help">
+            Use <code>[bracketed]</code> merge fields. Recognized:
+            <code>[Maker name]</code> <code>[location]</code> <code>[strengths]</code>
+            <code>[website]</code> <code>[contact method]</code> <code>[MOQ]</code>
+            <code>[lead time]</code> <code>[my name]</code> <code>[brand]</code>
+            <code>[phone]</code> <code>[my links]</code> <code>[my email]</code>.
+          </p>
+          <div class="form-grid" style="margin-top:12px;">
+            <div>
+              <label>[my name]</label>
+              <input id="me-name" placeholder="Your name" />
+            </div>
+            <div>
+              <label>[brand]</label>
+              <input id="me-brand" placeholder="Brand / studio name" />
+            </div>
+            <div>
+              <label>[phone]</label>
+              <input id="me-phone" placeholder="Your phone" />
+            </div>
+            <div>
+              <label>[my links]</label>
+              <input id="me-links" placeholder="website or Instagram" />
+            </div>
+            <div class="full">
+              <label>[my email]</label>
+              <input id="me-email" placeholder="you@brand.com" />
+            </div>
+          </div>
+          <div class="row-actions">
+            <button class="primary" id="btn-save-template">Save template &amp; sender info</button>
+          </div>
+        </div>
+
+        <!-- BRIEF TAB (read-only reference, from the connector spec sheet) -->
+        <div id="tab-brief" style="display:none;">
+          <div class="brief">
+            <h3>The Relic Connector — one standard</h3>
+            <p class="brief-sub">Turquoise heishi base · wearer-swappable · one identical fitting serves single &amp; span relics.</p>
+
+            <h4>The base</h4>
+            <p>Turquoise heishi strand with matched <em>host points</em> — <strong>CENTER · SIDE · SIDE</strong>.
+               All host points are identical: a single relic uses one, a span relic bridges two.</p>
+
+            <h4>Wear modes</h4>
+            <ul>
+              <li><strong>Mode A — single relic</strong> on the CENTER point (e.g. pearl relic, diamond-eye stone relic).</li>
+              <li><strong>Mode B — span relic</strong> bridging TWO points as fringe (Clip A + Clip B). Same clip as Mode A, used twice; graduated oxidized fringe with diamond drops.</li>
+            </ul>
+
+            <h4>The relic family</h4>
+            <p>Every relic ends in the <strong>same clip</strong>, so any one fits any host point:</p>
+            <ul>
+              <li>Baroque pearl</li>
+              <li>Coin medallion</li>
+              <li>Cross</li>
+              <li>Diamond-eye stone</li>
+              <li>Fringe (span)</li>
+            </ul>
+
+            <h4>Finish &amp; scope</h4>
+            <p>Oxidized silver with platinum-gray high points. Turquoise base leads; other bases (belt / scarf) are parked for now. Original design spec — concept line art.</p>
+
+            <p class="brief-foot">This is a written summary for quick reference. Send the actual <strong>connector spec sheet PDF</strong> as the attachment when you email makers.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <p class="footnote">
+    <span class="privacy">●</span> All data stays in this browser tab's memory only.
+    No localStorage, no server, no network requests. Export to JSON to keep your work.
+  </p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+(function () {
+  // ---------- Constants ----------
+  const STATUSES = ["Not contacted", "Drafted", "Sent", "Replied", "Quoted", "Passed"];
+
+  const DEFAULT_TEMPLATE =
+`Subject: Custom prototype inquiry — one turquoise & silver piece (designer seeking maker)
+
+Hi [Maker name],
+
+I'm a jewelry designer and I'd love to explore working with you on a single custom prototype to start.
+
+The piece is a turquoise heishi necklace in an oxidized-silver style, with a small dangling relic. What makes it different is a discreet connector that lets the relic clip on and off, so it can be swapped or moved between pieces. I've attached a spec sheet showing how the connector works, a reference photo for the fringe detail, and a photo of an earlier piece of mine so you can see the aesthetic. All metal would be oxidized silver with a weathered, platinum-gray finish. A physical mock-up is in progress and I'll send it along shortly.
+
+I'm intentionally starting with just this one piece to get it right before thinking about anything larger. Could you let me know:
+  • Whether this is a good fit for your workshop
+  • An estimated cost for a first prototype (the turquoise base + one relic + the connector), and typical revision cost
+  • Your lead time for a sample
+  • Whether you source turquoise heishi strands in-house or I should supply them
+  • Whether you sign a mutual confidentiality / NDA before detailed sharing
+
+I'd love to send more detail and find the right long-term maker for this. Thank you so much — I look forward to hearing from you.
+
+Warm regards,
+[my name]
+[brand]  ·  [phone]  ·  [my links]
+
+Attachments: connector spec sheet (PDF) · fringe reference photo · photo of past work · (mock-up to follow)`;
+
+  // ---------- In-memory state (NO localStorage, NO network) ----------
+  const state = {
+    makers: [],
+    template: DEFAULT_TEMPLATE,
+    sender: { name: "", brand: "", phone: "", links: "", email: "" },
+    selectedId: null,
+    sortKey: "name",
+    sortDir: 1, // 1 asc, -1 desc
+    filterLoc: "",
+    filterStatus: "",
+    search: "",
+    activeTab: "edit",
+  };
+
+  let idSeq = 1;
+  const newId = () => "m" + (idSeq++) + "-" + Math.random().toString(36).slice(2, 7);
+
+  // ---------- Column definitions for the table ----------
+  const COLUMNS = [
+    { key: "name",      label: "Name" },
+    { key: "location",  label: "Loc" },
+    { key: "status",    label: "Status" },
+    { key: "contactMethod", label: "Via" },
+    { key: "moq",       label: "MOQ" },
+    { key: "protoCost", label: "Proto", quote: true },
+    { key: "u50",       label: "@50",  quote: true, num: true },
+    { key: "u250",      label: "@250", quote: true, num: true },
+    { key: "u500",      label: "@500", quote: true, num: true },
+    { key: "leadTime",  label: "Lead time" },
+  ];
+
+  // ---------- Helpers ----------
+  const $ = (sel) => document.querySelector(sel);
+  const el = (id) => document.getElementById(id);
+
+  function toast(msg) {
+    const t = el("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("show"), 1900);
+  }
+
+  function makerById(id) { return state.makers.find((m) => m.id === id); }
+
+  // Parse a value for numeric sorting (strips $ , and whitespace)
+  function numVal(v) {
+    if (v == null) return NaN;
+    const n = parseFloat(String(v).replace(/[^0-9.\-]/g, ""));
+    return isNaN(n) ? NaN : n;
+  }
+
+  // ---------- Rendering: table ----------
+  function renderHead() {
+    const row = el("thead-row");
+    row.innerHTML = "";
+    COLUMNS.forEach((c) => {
+      const th = document.createElement("th");
+      th.textContent = c.label;
+      if (c.num) th.classList.add("num");
+      if (c.quote) th.classList.add("quote-col");
+      if (state.sortKey === c.key) {
+        const a = document.createElement("span");
+        a.className = "arrow";
+        a.textContent = state.sortDir === 1 ? "▲" : "▼";
+        th.appendChild(a);
+      }
+      th.addEventListener("click", () => {
+        if (state.sortKey === c.key) state.sortDir *= -1;
+        else { state.sortKey = c.key; state.sortDir = 1; }
+        renderHead();
+        renderTable();
+      });
+      row.appendChild(th);
+    });
+  }
+
+  function visibleMakers() {
+    const q = state.search.trim().toLowerCase();
+    let list = state.makers.filter((m) => {
+      if (state.filterLoc && m.location !== state.filterLoc) return false;
+      if (state.filterStatus && m.status !== state.filterStatus) return false;
+      if (q) {
+        const hay = (m.name + " " + m.notes + " " + m.strengths + " " + m.email).toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+    const key = state.sortKey, dir = state.sortDir;
+    const numeric = COLUMNS.find((c) => c.key === key && c.num);
+    list.sort((a, b) => {
+      let av = a[key], bv = b[key];
+      if (numeric) {
+        const an = numVal(av), bn = numVal(bv);
+        const aNaN = isNaN(an), bNaN = isNaN(bn);
+        if (aNaN && bNaN) return 0;
+        if (aNaN) return 1;       // blanks sink to bottom
+        if (bNaN) return -1;
+        return (an - bn) * dir;
+      }
+      av = (av || "").toString().toLowerCase();
+      bv = (bv || "").toString().toLowerCase();
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return 0;
+    });
+    return list;
+  }
+
+  function statusClass(status) {
+    const cls = "st-" + (status || "").replace(/\s+/g, ".");
+    return STATUSES.includes(status) ? "st-" + status.replace(/\s+/g, ".") : "st-default";
+  }
+
+  function renderTable() {
+    const tbody = el("maker-tbody");
+    tbody.innerHTML = "";
+    const list = visibleMakers();
+    el("maker-count").textContent =
+      list.length + (list.length === state.makers.length ? "" : " of " + state.makers.length) +
+      (state.makers.length === 1 ? " maker" : " makers");
+
+    if (!list.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = COLUMNS.length;
+      td.className = "empty";
+      td.textContent = state.makers.length ? "No makers match your filters." : "No makers yet — add your first one.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    list.forEach((m) => {
+      const tr = document.createElement("tr");
+      if (m.id === state.selectedId) tr.classList.add("selected");
+      tr.addEventListener("click", () => selectMaker(m.id));
+      COLUMNS.forEach((c) => {
+        const td = document.createElement("td");
+        if (c.num) td.classList.add("num");
+        if (c.quote) td.classList.add("quote-col");
+        if (c.key === "status") {
+          const span = document.createElement("span");
+          span.className = "pill " + statusClass(m.status);
+          span.textContent = m.status || "—";
+          td.appendChild(span);
+        } else if (c.key === "name") {
+          td.innerHTML = "";
+          const strong = document.createElement("strong");
+          strong.textContent = m.name || "(unnamed)";
+          td.appendChild(strong);
+        } else {
+          td.textContent = (m[c.key] === undefined || m[c.key] === "") ? "—" : m[c.key];
+        }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ---------- Rendering: editor form ----------
+  function blankMaker() {
+    return {
+      id: newId(), name: "", location: "Bali", email: "", contactMethod: "Email",
+      website: "", strengths: "", status: "Not contacted", moq: "", protoCost: "",
+      u50: "", u250: "", u500: "", leadTime: "", notes: "",
+    };
+  }
+
+  function fillForm(m) {
+    const f = el("maker-form");
+    f.name.value = m.name || "";
+    f.location.value = m.location || "Bali";
+    f.status.value = m.status || "Not contacted";
+    f.email.value = m.email || "";
+    f.contactMethod.value = m.contactMethod || "Email";
+    f.website.value = m.website || "";
+    f.strengths.value = m.strengths || "";
+    f.moq.value = m.moq || "";
+    f.protoCost.value = m.protoCost || "";
+    f.u50.value = m.u50 || "";
+    f.u250.value = m.u250 || "";
+    f.u500.value = m.u500 || "";
+    f.leadTime.value = m.leadTime || "";
+    f.notes.value = m.notes || "";
+  }
+
+  function readForm() {
+    const f = el("maker-form");
+    return {
+      name: f.name.value.trim(),
+      location: f.location.value,
+      status: f.status.value,
+      email: f.email.value.trim(),
+      contactMethod: f.contactMethod.value,
+      website: f.website.value.trim(),
+      strengths: f.strengths.value.trim(),
+      moq: f.moq.value.trim(),
+      protoCost: f.protoCost.value.trim(),
+      u50: f.u50.value.trim(),
+      u250: f.u250.value.trim(),
+      u500: f.u500.value.trim(),
+      leadTime: f.leadTime.value.trim(),
+      notes: f.notes.value.trim(),
+    };
+  }
+
+  function showEditor() {
+    const m = makerById(state.selectedId);
+    if (m) {
+      el("edit-empty").style.display = "none";
+      el("maker-form").style.display = "block";
+      fillForm(m);
+    } else {
+      el("edit-empty").style.display = "block";
+      el("maker-form").style.display = "none";
+    }
+  }
+
+  function selectMaker(id) {
+    state.selectedId = id;
+    renderTable();
+    showEditor();
+    if (state.activeTab === "draft") renderDraft();
+  }
+
+  // ---------- Draft generation ----------
+  // Map of merge-field (lowercased, trimmed) -> value-getter
+  function mergeValues(m) {
+    return {
+      "maker name": m.name,
+      "maker": m.name,
+      "name": m.name,
+      "location": m.location,
+      "strengths": m.strengths,
+      "website": m.website,
+      "contact method": m.contactMethod,
+      "contact email": m.email,
+      "email": m.email,
+      "moq": m.moq,
+      "lead time": m.leadTime,
+      "my name": state.sender.name,
+      "your name": state.sender.name,
+      "brand": state.sender.brand,
+      "brand / studio name": state.sender.brand,
+      "phone": state.sender.phone,
+      "my links": state.sender.links,
+      "website or instagram": state.sender.links,
+      "my email": state.sender.email,
+    };
+  }
+
+  function generateDraft(m) {
+    const vals = mergeValues(m);
+    const unfilled = [];
+    const text = state.template.replace(/\[([^\[\]]+)\]/g, (whole, field) => {
+      const key = field.trim().toLowerCase();
+      if (key in vals) {
+        const v = vals[key];
+        if (v == null || v === "") { unfilled.push(field.trim()); return "[" + field.trim() + "]"; }
+        return v;
+      }
+      unfilled.push(field.trim());
+      return whole; // leave unknown fields as-is so user notices
+    });
+    return { text, unfilled };
+  }
+
+  function renderDraft(forceRegen) {
+    const m = makerById(state.selectedId);
+    const area = el("draft-area"), empty = el("draft-empty");
+    if (!m) { area.style.display = "none"; empty.style.display = "block"; return; }
+    empty.style.display = "none";
+    area.style.display = "block";
+    el("draft-for").textContent = m.name || "(unnamed)";
+
+    const box = el("draft-text");
+    // Regenerate when forced, when switching makers, or when box is empty.
+    if (forceRegen || box.dataset.makerId !== m.id || box.value.trim() === "") {
+      const { text, unfilled } = generateDraft(m);
+      box.value = text;
+      box.dataset.makerId = m.id;
+      const uniq = [...new Set(unfilled)];
+      el("unfilled-warn").textContent = uniq.length
+        ? "⚠ Unfilled fields: " + uniq.map((u) => "[" + u + "]").join(", ")
+        : "✓ All merge fields filled.";
+    }
+  }
+
+  // ---------- Tabs ----------
+  function setTab(tab) {
+    state.activeTab = tab;
+    document.querySelectorAll(".tab").forEach((t) =>
+      t.classList.toggle("active", t.dataset.tab === tab));
+    el("tab-edit").style.display = tab === "edit" ? "block" : "none";
+    el("tab-draft").style.display = tab === "draft" ? "block" : "none";
+    el("tab-template").style.display = tab === "template" ? "block" : "none";
+    el("tab-brief").style.display = tab === "brief" ? "block" : "none";
+    if (tab === "draft") renderDraft();
+    if (tab === "template") {
+      el("template-text").value = state.template;
+      el("me-name").value = state.sender.name;
+      el("me-brand").value = state.sender.brand;
+      el("me-phone").value = state.sender.phone;
+      el("me-links").value = state.sender.links;
+      el("me-email").value = state.sender.email;
+    }
+  }
+
+  // ---------- Import / Export (local file only) ----------
+  function exportJSON() {
+    const payload = {
+      app: "Relic Outreach Tracker",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      template: state.template,
+      sender: state.sender,
+      makers: state.makers,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = "relic-outreach-" + stamp + ".json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast("Exported " + state.makers.length + " makers to JSON");
+  }
+
+  function importJSON(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (!data || !Array.isArray(data.makers)) throw new Error("Missing makers array");
+        // Normalize and assign fresh ids to avoid collisions.
+        state.makers = data.makers.map((m) => Object.assign(blankMaker(), m, { id: newId() }));
+        if (typeof data.template === "string") state.template = data.template;
+        if (data.sender && typeof data.sender === "object") {
+          state.sender = {
+            name: data.sender.name || "",
+            brand: data.sender.brand || "",
+            phone: data.sender.phone || "",
+            links: data.sender.links || "",
+            email: data.sender.email || "",
+          };
+        }
+        state.selectedId = null;
+        renderAll();
+        setTab("edit");
+        toast("Imported " + state.makers.length + " makers");
+      } catch (err) {
+        toast("Import failed: " + err.message);
+      }
+    };
+    reader.onerror = () => toast("Could not read file");
+    reader.readAsText(file);
+  }
+
+  // ---------- Seed data (your real makers, from the outreach drafts) ----------
+  // Status starts at "Drafted": personalized emails are written but NOT yet sent.
+  // No email addresses are pre-filled — pull each one from the maker's own site so
+  // nothing bounces. Drafts are ready to copy from the Email-draft tab.
+  function seedMakers() {
+    const mk = (o) => Object.assign(blankMaker(), o, { id: newId() });
+    return [
+      // --- BALI ---
+      mk({ name: "Binar Silver", location: "Bali", contactMethod: "Email", status: "Drafted",
+           website: "binar-silver.com/contact",
+           strengths: "Denpasar silver workshop; owner Enny (fluent English, ~1-day replies)",
+           notes: "Address the note to Enny. Site blocks bots — open binar-silver.com/contact yourself to get email/WhatsApp." }),
+      mk({ name: "Bali Silver Export", location: "Bali", contactMethod: "WhatsApp", status: "Drafted",
+           website: "balisilverexport.com",
+           strengths: "Celuk OEM / private-label workshop",
+           notes: "Likely a general/sales inbox or WhatsApp. Look for a WhatsApp / quote form on the site." }),
+      mk({ name: "PlasaBali", location: "Bali", contactMethod: "Email", status: "Drafted",
+           website: "plasabali.com",
+           strengths: "Celuk; 925 silver + brass findings, custom work",
+           notes: "They note an email contact for custom. Pull it from plasabali.com." }),
+      mk({ name: "SUNSRI House of Jewelry", location: "Bali", contactMethod: "Email", status: "Drafted",
+           website: "sunsrijewelry.com",
+           strengths: "Celuk; 925 / brass / copper, accepts individual custom orders",
+           notes: "Get contact from sunsrijewelry.com." }),
+      // --- UNITED STATES (lead with strung work; may supply Pueblo-sourced heishi) ---
+      mk({ name: "NYC Diamond District casting house", location: "US", contactMethod: "Email", status: "Drafted",
+           website: "",
+           strengths: "Full-service CAD / cast / set / finish",
+           notes: "Pick a specific shop (e.g. Golden Casting) and use its site contact / quote request." }),
+      mk({ name: "Earwings (Christine McPartland)", location: "US", contactMethod: "Email", status: "Drafted",
+           website: "",
+           strengths: "Small-batch casting/fabrication, plating & specialty finishes — good culture fit",
+           notes: "Address to Christine. Small studio — a personal note lands well." }),
+      mk({ name: "Santa Fe / Southwest bench jeweler", location: "US", contactMethod: "Email", status: "Drafted",
+           website: "",
+           strengths: "Strong turquoise expertise; authentic heishi / heritage angle",
+           notes: "Pick one studio from the package. Ask specifically about genuine Pueblo-sourced heishi." }),
+      mk({ name: "LA private-label jeweler (e.g. MKM)", location: "US", contactMethod: "Email", status: "Drafted",
+           website: "",
+           strengths: "Non-precious + silver, low minimums, batches to ~1,000 (useful for later scaling)",
+           notes: "Contact via the studio's site / project request form." }),
+    ];
+  }
+
+  function loadSample() {
+    if (state.makers.length && !confirm("Reset to the seeded maker list and master template? This replaces current data.")) return;
+    state.makers = seedMakers();
+    state.template = DEFAULT_TEMPLATE;
+    state.selectedId = state.makers[0].id;
+    renderAll();
+    showEditor();
+    toast("Loaded seeded makers");
+  }
+
+  // ---------- Wire up filters / dropdowns that depend on STATUSES ----------
+  function populateStatusControls() {
+    const fStatus = el("form-status");
+    const filterStatus = el("filter-status");
+    STATUSES.forEach((s) => {
+      const o1 = document.createElement("option"); o1.textContent = s; fStatus.appendChild(o1);
+      const o2 = document.createElement("option"); o2.value = s; o2.textContent = s; filterStatus.appendChild(o2);
+    });
+  }
+
+  function renderAll() {
+    renderHead();
+    renderTable();
+    showEditor();
+  }
+
+  // ---------- Event wiring ----------
+  function init() {
+    populateStatusControls();
+
+    // Tabs
+    document.querySelectorAll(".tab").forEach((t) =>
+      t.addEventListener("click", () => setTab(t.dataset.tab)));
+
+    // Add maker
+    el("btn-new").addEventListener("click", () => {
+      const m = blankMaker();
+      state.makers.push(m);
+      state.selectedId = m.id;
+      renderTable();
+      setTab("edit");
+      showEditor();
+      el("maker-form").name.focus();
+      toast("New maker added — fill in details and Save");
+    });
+
+    // Save form
+    el("maker-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const m = makerById(state.selectedId);
+      if (!m) return;
+      Object.assign(m, readForm());
+      renderTable();
+      // keep draft in sync if it's the current maker
+      const box = el("draft-text");
+      if (box.dataset.makerId === m.id) renderDraft(true);
+      toast("Saved “" + (m.name || "maker") + "”");
+    });
+
+    // Delete
+    el("btn-delete").addEventListener("click", () => {
+      const m = makerById(state.selectedId);
+      if (!m) return;
+      if (!confirm("Delete “" + (m.name || "this maker") + "”? This cannot be undone.")) return;
+      state.makers = state.makers.filter((x) => x.id !== m.id);
+      state.selectedId = null;
+      renderTable();
+      showEditor();
+      toast("Deleted");
+    });
+
+    // Generate draft from edit tab
+    el("btn-gen-from-edit").addEventListener("click", () => {
+      const m = makerById(state.selectedId);
+      if (!m) return;
+      // Save current edits first so the draft reflects them.
+      Object.assign(m, readForm());
+      renderTable();
+      setTab("draft");
+      renderDraft(true);
+    });
+
+    // Draft: copy
+    el("btn-copy").addEventListener("click", async () => {
+      const box = el("draft-text");
+      try {
+        await navigator.clipboard.writeText(box.value);
+        toast("Draft copied to clipboard");
+      } catch (err) {
+        // Fallback for browsers / file:// where Clipboard API is blocked.
+        box.focus(); box.select();
+        const ok = document.execCommand && document.execCommand("copy");
+        toast(ok ? "Draft copied to clipboard" : "Press Ctrl/Cmd+C to copy");
+      }
+    });
+
+    // Draft: re-generate
+    el("btn-regen").addEventListener("click", () => renderDraft(true));
+
+    // Template save
+    el("btn-save-template").addEventListener("click", () => {
+      state.template = el("template-text").value;
+      state.sender = {
+        name: el("me-name").value.trim(),
+        brand: el("me-brand").value.trim(),
+        phone: el("me-phone").value.trim(),
+        links: el("me-links").value.trim(),
+        email: el("me-email").value.trim(),
+      };
+      toast("Template & sender info saved");
+      // Refresh any open draft.
+      const box = el("draft-text");
+      if (box.dataset.makerId) renderDraft(true);
+    });
+
+    // Filters
+    el("search").addEventListener("input", (e) => { state.search = e.target.value; renderTable(); });
+    el("filter-loc").addEventListener("change", (e) => { state.filterLoc = e.target.value; renderTable(); });
+    el("filter-status").addEventListener("change", (e) => { state.filterStatus = e.target.value; renderTable(); });
+
+    // Import / export
+    el("btn-export").addEventListener("click", exportJSON);
+    el("btn-import").addEventListener("click", () => el("file-input").click());
+    el("file-input").addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (f) importJSON(f);
+      e.target.value = ""; // allow re-importing same filename
+    });
+
+    // Sample
+    el("btn-sample").addEventListener("click", loadSample);
+
+    // Seed with your real makers + master template on first load so the app
+    // opens populated. (Use "Reset to seeded data" to restore, or Import a JSON.)
+    state.makers = seedMakers();
+    state.selectedId = state.makers[0].id;
+
+    renderAll();
+    setTab("edit");
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>
