@@ -24,7 +24,7 @@ img{display:block}
 .deck{position:fixed;inset:0;background:var(--canvas)}
 .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   opacity:0;visibility:hidden;transition:opacity 1s ease, visibility 0s linear 1s;
-  padding:6vh 7vw;overflow:hidden;background:var(--canvas)}
+  padding:6vh 7vw;overflow:hidden;background:var(--canvas);cursor:pointer}
 .slide.active{opacity:1;visibility:visible;transition:opacity 1s ease;z-index:2}
 .inner{max-width:1100px;width:100%;position:relative;z-index:3}
 
@@ -852,6 +852,7 @@ function prev(){ if(i<=1){return;} show(i-1); }
 document.getElementById('zPrev').addEventListener('click',e=>{e.stopPropagation();prev();});
 document.addEventListener('click',e=>{
   if(e.target.closest('.skip'))return;
+  if(Date.now()-lastTouchNav<600)return;  /* tap already handled via touchend */
   next();
 });
 document.addEventListener('keydown',e=>{
@@ -860,14 +861,26 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Home'){filmDone=true;filmTimers.forEach(clearTimeout);show(1);}
   if(e.key==='End')show(slides.length-1);
 });
-let tx=null;
-document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX},{passive:true});
+/* touch: swipe right = back, plain tap = advance.
+   Handled directly on touchend because iOS Safari does not deliver
+   click events to document-level listeners from non-interactive areas. */
+let tx=null,ty=null,lastTouchNav=0;
+document.addEventListener('touchstart',e=>{
+  tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;
+},{passive:true});
 document.addEventListener('touchend',e=>{
   if(tx===null)return;
+  if(e.target.closest('.skip')){tx=ty=null;return;}
   const dx=e.changedTouches[0].clientX-tx;
-  if(dx>50){prev();}
-  tx=null;
-},{passive:true});
+  const dy=e.changedTouches[0].clientY-ty;
+  if(dx>50){prev();lastTouchNav=Date.now();}
+  else if(Math.abs(dx)<12&&Math.abs(dy)<12){
+    lastTouchNav=Date.now();
+    if(e.cancelable)e.preventDefault();  /* suppress the synthesized click */
+    if(e.target.closest('#zPrev'))prev();else next();
+  }
+  tx=ty=null;
+},{passive:false});
 
 /* boot */
 show(0);
