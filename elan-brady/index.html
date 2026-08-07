@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Élan Brady — The Vision</title>
+<meta name="description" content="Élan Brady — a Texas luxury jewelry house of modern heirlooms, one connected jewelry language, five regional expressions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#FFFFFF; --sand:#F4F1EA; --ink:#171A18;
+  --blue-08:rgba(181,208,226,.28); --blue-16:rgba(181,208,226,.55); --blue:#B5D0E2;
+  --green:#175B40; --aqua:#7FC4BD; --aqua-deep:#4FA69E; --gold:#B8912F;
+  --deepgreen:#1C2D20; --door:#1E3A31;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#000;color:var(--ink);
+  font-family:'EB Garamond',serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+img{display:block}
+
+.deck{position:fixed;inset:0;background:var(--canvas)}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity 1s ease, visibility 0s linear 1s;
+  padding:6vh 7vw;overflow:hidden;background:var(--canvas)}
+.slide.active{opacity:1;visibility:visible;transition:opacity 1s ease;z-index:2}
+.inner{max-width:1100px;width:100%;position:relative;z-index:3}
+
+.slide .st{opacity:0;transform:translateY(14px);
+  transition:opacity 1s cubic-bezier(.2,.6,.2,1),transform 1s cubic-bezier(.2,.6,.2,1)}
+.slide.active .st{opacity:1;transform:none}
+.slide.active .d1{transition-delay:.15s}.slide.active .d2{transition-delay:.5s}
+.slide.active .d3{transition-delay:.9s}.slide.active .d4{transition-delay:1.3s}
+.slide.active .d5{transition-delay:1.75s}.slide.active .d6{transition-delay:2.2s}
+.slide.active .d7{transition-delay:2.65s}.slide.active .d8{transition-delay:3.1s}
+
+.eyebrow{font-family:'Jost',sans-serif;font-weight:300;font-size:clamp(10px,1.05vw,13px);
+  letter-spacing:.42em;text-transform:uppercase;color:var(--green);margin-bottom:3vh}
+.eyebrow .n{color:var(--gold)}
+h1,h2{font-family:'Cormorant',serif;font-weight:300;line-height:1.12}
+h1{font-size:clamp(32px,5.4vw,72px)}
+h2{font-size:clamp(26px,4vw,54px)}
+.big-i{font-style:italic}
+.lede{font-size:clamp(15px,1.45vw,20px);line-height:1.7;max-width:60ch;color:#3a3f3c}
+.quiet{font-family:'Jost',sans-serif;font-weight:300;font-size:clamp(9.5px,.95vw,12.5px);
+  letter-spacing:.24em;text-transform:uppercase;color:#8d938f}
+.hair{height:1px;background:var(--gold);width:64px;margin:3vh 0;opacity:.85}
+.center{text-align:center}
+.center .hair,.center .lede{margin-left:auto;margin-right:auto}
+
+/* photo treatments */
+.ph{position:relative;overflow:hidden;border-radius:10px;background:var(--sand)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 20px 12px;
+  background:linear-gradient(180deg,transparent,rgba(12,14,12,.55));
+  color:rgba(255,255,255,.92);font-family:'Jost',sans-serif;font-weight:300;
+  font-size:10px;letter-spacing:.26em;text-transform:uppercase;text-align:center}
+.frame{border:1px solid #e6e2d6;border-radius:10px;overflow:hidden;background:#fff;
+  box-shadow:0 22px 60px -30px rgba(23,26,24,.35)}
+.frame img{width:100%;height:auto}
+
+/* wordmark */
+.wordmark{display:inline-block;text-align:center;line-height:1}
+.wordmark .elan{font-family:'Cormorant',serif;font-weight:300;letter-spacing:.42em;
+  font-size:clamp(38px,6vw,82px);display:inline-block;position:relative;padding-left:.42em}
+.wordmark .elan .e{position:relative;display:inline-block}
+.wordmark .elan .e svg{position:absolute;top:-.34em;left:.06em;width:.68em;height:.3em;overflow:visible}
+.wordmark .brady{font-family:'Cormorant SC',serif;font-weight:400;letter-spacing:.58em;
+  font-size:clamp(12px,1.6vw,21px);display:block;margin-top:.55em;padding-left:.58em}
+.wordmark .atelier{font-family:'Jost',sans-serif;font-weight:200;letter-spacing:.6em;
+  font-size:clamp(8px,.85vw,11px);display:block;margin-top:1.4em;padding-left:.6em;color:#6d736f}
+.wordmark.on-dark{color:#fff}.wordmark.on-dark .atelier{color:rgba(255,255,255,.6)}
+
+/* =========== INTRO FILM =========== */
+#film{background:#000;padding:0}
+.fs{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 1.8s ease;pointer-events:none;text-align:center;padding:8vh 8vw}
+.fs.on{opacity:1}
+#f1{padding:0}
+#f1 .bg{position:absolute;inset:0;overflow:hidden}
+#f1 .bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);
+  animation:kb-slow 14s ease-out forwards}
+@keyframes kb-slow{to{transform:scale(1)}}
+#f1 .bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.05) 45%,rgba(0,0,0,.55))}
+.f-cap{position:relative;z-index:2;color:rgba(255,255,255,.94);font-family:'Jost',sans-serif;
+  font-weight:200;letter-spacing:.5em;text-transform:uppercase;font-size:clamp(10px,1.2vw,15px);
+  text-shadow:0 1px 24px rgba(0,0,0,.5)}
+#f1 .f-cap{position:absolute;left:0;right:0;bottom:12vh}
+.f-q{position:relative;z-index:2;font-family:'Cormorant',serif;font-style:italic;font-weight:300;
+  color:#fff;font-size:clamp(24px,3.6vw,48px);line-height:1.4;max-width:26ch}
+#f3{background:#000}
+.f-doors{position:absolute;inset:0;display:flex}
+.f-doors .p{flex:1;background:linear-gradient(100deg,#20423a,#16302a 52%,#1d3d34)}
+.f-doors .p.l{border-right:1px solid rgba(255,255,255,.1)}
+.f-doors .p.r{border-left:1px solid rgba(0,0,0,.3)}
+.f-doors .p{transition:transform 2.8s cubic-bezier(.65,0,.25,1)}
+#f3.open .p.l{transform:translateX(-102%)}
+#f3.open .p.r{transform:translateX(102%)}
+#f3 .light{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#fdfbf5,#f0ead9 55%,#e2dbc6)}
+#f3 .fmark{position:relative;z-index:3;transition:opacity 1.5s ease}
+#f3.open .fmark{opacity:0}
+#f4{background:#0e120f;padding:0}
+.f-strip{position:absolute;inset:0;display:flex;gap:3px;background:#0e120f}
+.f-strip .band{flex:1;position:relative;overflow:hidden;
+  transform:translateY(101%);transition:transform 1.3s cubic-bezier(.2,.7,.2,1)}
+#f4.on .band{transform:none}
+#f4.on .band:nth-child(2){transition-delay:.35s}
+#f4.on .band:nth-child(3){transition-delay:.7s}
+#f4.on .band:nth-child(4){transition-delay:1.05s}
+#f4.on .band:nth-child(5){transition-delay:1.4s}
+.f-strip .band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.f-strip .band::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(10,14,11,.55),transparent 32%,transparent 55%,rgba(10,14,11,.62))}
+.f-strip .band span{position:absolute;left:0;right:0;bottom:26px;z-index:2;text-align:center;
+  color:rgba(255,255,255,.94);font-family:'Jost',sans-serif;font-weight:300;
+  letter-spacing:.32em;text-transform:uppercase;font-size:clamp(8px,.95vw,12px)}
+#f4 .f-cap{position:absolute;left:0;right:0;top:7vh;z-index:3;
+  text-shadow:0 1px 20px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.6)}
+#f5{background:var(--canvas)}
+.f-thresh{font-family:'Cormorant',serif;font-weight:300;color:var(--ink);
+  font-size:clamp(28px,4.4vw,58px);line-height:1.25}
+.f-thresh em{font-style:italic;color:var(--green)}
+.f-sub{margin-top:3vh;font-family:'Jost',sans-serif;font-weight:300;letter-spacing:.3em;
+  text-transform:uppercase;font-size:clamp(9px,1vw,12px);color:#8d938f}
+.skip{position:absolute;right:26px;bottom:24px;z-index:20;font-family:'Jost',sans-serif;
+  font-weight:300;font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.25);border-radius:100px;
+  padding:10px 20px;transition:color .3s,border-color .3s}
+.skip:hover{color:#fff;border-color:rgba(255,255,255,.6)}
+#film.lightmode .skip{color:#8d938f;border-color:#d8d4c8}
+.tapnote{position:absolute;left:26px;bottom:28px;z-index:20;font-family:'Jost',sans-serif;
+  font-weight:300;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+#film.lightmode .tapnote{color:#b9b4a6}
+
+/* =========== LINE SLIDES — real photography =========== */
+.line-slide{padding:0}
+.line-wrap{display:grid;grid-template-columns:46% 54%;position:absolute;inset:0}
+.line-field{position:relative;overflow:hidden;background:#101512}
+.line-field img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transform:scale(1.06)}
+.slide.active .line-field img{animation:kb 26s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1.06) translateY(0)}to{transform:scale(1.12) translateY(-1.5%)}}
+.line-field::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(10,14,11,.08),transparent 45%,rgba(10,14,11,.66))}
+.line-field .lname{position:absolute;left:8%;bottom:9%;color:#fff;z-index:2;
+  text-shadow:0 1px 30px rgba(0,0,0,.45)}
+.line-field .lname .idx{font-family:'Jost',sans-serif;font-weight:300;font-size:11.5px;
+  letter-spacing:.4em;opacity:.85;display:block;margin-bottom:12px}
+.line-field .lname h2{font-family:'Cormorant',serif;font-weight:300;letter-spacing:.12em;
+  font-size:clamp(30px,4.3vw,60px);color:#fff}
+.line-copy{display:flex;flex-direction:column;justify-content:center;padding:7vh 7vw 7vh 5.5vw;background:var(--canvas)}
+.promise{font-family:'Cormorant',serif;font-style:italic;font-weight:300;
+  font-size:clamp(22px,2.7vw,38px);line-height:1.25;margin-bottom:3vh}
+.mats{display:flex;flex-wrap:wrap;gap:8px 9px;margin-bottom:3vh}
+.mats span{font-family:'Jost',sans-serif;font-weight:300;font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:#5c625e;border:1px solid #e2e0d8;border-radius:100px;
+  padding:6px 14px;background:var(--sand)}
+.worldnote{font-size:clamp(13.5px,1.2vw,16.5px);line-height:1.7;color:#4a504c;max-width:46ch}
+
+/* gap diagram */
+.gap{position:relative;margin-top:5vh;height:210px}
+.gap .axis{position:absolute;top:50%;left:4%;right:4%;height:1px;background:var(--gold);
+  transform:scaleX(0);transform-origin:left;transition:transform 1.6s ease .5s}
+.slide.active .gap .axis{transform:scaleX(1)}
+.gap .pole{position:absolute;top:50%;width:190px;transform:translateY(-50%)}
+.gap .pole.l{left:2%}.gap .pole.r{right:2%;text-align:right}
+.gap .pole h3{font-family:'Cormorant SC',serif;font-weight:400;font-size:clamp(15px,1.7vw,23px);letter-spacing:.1em}
+.gap .pole p{font-family:'Jost',sans-serif;font-weight:300;font-size:11.5px;color:#8d938f;margin-top:8px;line-height:1.55}
+.gap .bloom{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(330px,36vw);aspect-ratio:1.6/1;border-radius:50%;
+  background:radial-gradient(closest-side,var(--blue-16),var(--blue-08) 55%,transparent 78%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  opacity:0;transition:opacity 1.4s ease 1.7s}
+.slide.active .gap .bloom{opacity:1}
+.gap .bloom h3{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(19px,2.3vw,30px)}
+.gap .bloom p{font-family:'Jost',sans-serif;font-weight:300;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--green)}
+
+/* crossroads */
+.cross-wrap{display:grid;grid-template-columns:44% 56%;gap:4.5vw;align-items:center}
+.cross-wrap .ph{aspect-ratio:3/4;max-height:66vh}
+.parts{display:flex;flex-wrap:wrap;gap:9px;margin:3vh 0}
+.parts span{font-family:'Jost',sans-serif;font-weight:300;font-size:10.5px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--green);border:1px solid #d9e6e0;border-radius:100px;
+  padding:8px 16px;background:rgba(181,208,226,.14)}
+.cross-note{font-family:'Jost',sans-serif;font-weight:300;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8d938f;line-height:2}
+
+/* MARTHA */
+#s-martha{background:#0c0d0b;color:#efeee8}
+#s-martha .m-grid{display:grid;grid-template-columns:55% 45%;gap:4.5vw;align-items:center;max-width:1160px}
+#s-martha .m-name{font-family:'Cormorant',serif;font-weight:300;font-style:italic;
+  letter-spacing:.24em;font-size:clamp(42px,6.4vw,90px);color:#fff}
+#s-martha .quiet{color:rgba(239,238,232,.55)}
+#s-martha .lede{color:rgba(239,238,232,.78)}
+#s-martha .m-plate{border:1px solid rgba(184,145,47,.4);border-radius:10px;overflow:hidden;
+  box-shadow:0 30px 90px -40px rgba(184,145,47,.35);position:relative}
+#s-martha .m-plate img{width:100%;height:auto}
+#s-martha .m-plate .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 12px;
+  background:linear-gradient(180deg,transparent,rgba(12,13,11,.72));color:rgba(239,238,232,.85);
+  font-family:'Jost',sans-serif;font-weight:300;font-size:9.5px;letter-spacing:.26em;
+  text-transform:uppercase;text-align:center}
+
+/* tiers */
+.tier-wrap{display:grid;grid-template-columns:58% 42%;gap:4vw;align-items:center}
+.tiers{margin-top:3.2vh;display:flex;flex-direction:column;gap:9px}
+.tier{display:grid;grid-template-columns:200px 1fr;align-items:center;gap:20px;
+  background:var(--sand);border-radius:8px;padding:16px 24px;border-left:3px solid var(--gold)}
+.tier:nth-child(2){border-left-color:var(--green)}
+.tier:nth-child(3){border-left-color:var(--aqua-deep)}
+.tier:nth-child(4){border-left-color:#a4a89f}
+.tier h4{font-family:'Cormorant SC',serif;font-weight:500;font-size:clamp(13px,1.4vw,18px);letter-spacing:.07em}
+.tier p{font-family:'Jost',sans-serif;font-weight:300;font-size:11.5px;color:#5c625e}
+.tier-cap{margin-top:2.6vh;font-style:italic;font-size:clamp(13px,1.35vw,17px);color:#3a3f3c}
+
+/* ===== NUMBERS: gates ===== */
+.gates{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:3.6vh}
+.gate{border:1px solid #e6e2d6;border-radius:10px;padding:24px 24px 20px;background:var(--canvas);position:relative}
+.gate.hot{background:var(--sand);border-color:#dcd6c6}
+.gate .gn{font-family:'Jost',sans-serif;font-weight:300;font-size:10px;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.gate h4{font-family:'Cormorant',serif;font-weight:400;font-size:clamp(18px,1.9vw,25px);margin-bottom:4px}
+.gate .amt{font-family:'Cormorant',serif;font-weight:300;font-size:clamp(24px,2.6vw,36px);color:var(--green);margin-bottom:14px}
+.gate ul{list-style:none}
+.gate li{font-family:'Jost',sans-serif;font-weight:300;font-size:12px;line-height:1.5;color:#4a504c;
+  padding:5px 0;border-top:1px solid #eeebe1;display:flex;justify-content:space-between;gap:10px}
+.gate li b{font-weight:400;color:var(--ink);white-space:nowrap}
+.gate .unlock{margin-top:14px;font-family:'EB Garamond',serif;font-style:italic;
+  font-size:13.5px;color:var(--green)}
+.fineprint{margin-top:2.6vh;font-family:'Jost',sans-serif;font-weight:300;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;color:#a4a89f;text-align:center}
+
+/* ===== NUMBERS: revenue chart ===== */
+.rev{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:end;
+  margin-top:4vh;height:300px}
+.rcol{display:flex;flex-direction:column;justify-content:flex-end;height:100%;text-align:center}
+.rbar{position:relative;border-radius:8px 8px 0 0;margin:0 12%;
+  transform:scaleY(0);transform-origin:bottom;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.slide.active .rbar{transform:scaleY(1)}
+.slide.active .rc2 .rbar{transition-delay:.35s}
+.slide.active .rc3 .rbar{transition-delay:.7s}
+.rb1{height:19%;background:linear-gradient(180deg,var(--blue),rgba(181,208,226,.55))}
+.rb2{height:48%;background:linear-gradient(180deg,var(--aqua),var(--aqua-deep))}
+.rb3{height:100%;background:linear-gradient(180deg,#2b7d5c,var(--green))}
+.rbar .rv{position:absolute;top:-2.6em;left:0;right:0;font-family:'Cormorant',serif;
+  font-weight:400;font-size:clamp(17px,1.9vw,26px);color:var(--ink);white-space:nowrap}
+.rmeta{margin-top:14px;border-top:1px solid #e6e2d6;padding-top:12px}
+.rmeta h4{font-family:'Cormorant SC',serif;font-weight:500;font-size:clamp(13px,1.4vw,18px);letter-spacing:.08em}
+.rmeta p{font-family:'Jost',sans-serif;font-weight:300;font-size:11px;line-height:1.6;color:#5c625e;margin-top:6px}
+
+/* growth path */
+.gpath{display:flex;align-items:center;gap:0;margin-top:4.5vh;flex-wrap:wrap;justify-content:center}
+.gstep{background:var(--sand);border:1px solid #e6e2d6;border-radius:10px;padding:18px 22px;text-align:center;min-width:150px}
+.gstep h5{font-family:'Cormorant',serif;font-weight:400;font-size:clamp(16px,1.7vw,22px)}
+.gstep p{font-family:'Jost',sans-serif;font-weight:300;font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--green);margin-top:6px}
+.garr{font-family:'Cormorant',serif;font-size:26px;color:var(--gold);padding:0 16px}
+
+/* craft / production */
+.craft{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:4vh}
+.craft .c{border-top:1px solid var(--gold);padding-top:2.2vh}
+.craft h4{font-family:'Cormorant SC',serif;font-weight:500;letter-spacing:.09em;font-size:clamp(13px,1.45vw,19px);margin-bottom:1.2vh}
+.craft .where{font-family:'Jost',sans-serif;font-weight:300;font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--green);margin-bottom:1.3vh}
+.craft p{font-size:clamp(12.5px,1.1vw,15px);line-height:1.65;color:#4a504c}
+.worktable{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:3.4vh}
+.worktable .frame{box-shadow:0 14px 40px -24px rgba(23,26,24,.35)}
+.worktable .frame img{aspect-ratio:16/10;object-fit:cover;height:auto}
+.worktable-cap{margin-top:1.8vh;font-family:'Jost',sans-serif;font-weight:300;font-size:10px;
+  letter-spacing:.22em;text-transform:uppercase;color:#a4a89f;text-align:center}
+
+/* brand codes */
+.codes{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4vh;align-items:start}
+.codes .frame img{max-height:56vh;object-fit:cover;object-position:top}
+
+/* open studio */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4vh}
+.path{border:1px solid #e2ded2;border-radius:10px;padding:26px 28px;background:var(--canvas)}
+.path.warm{background:var(--sand)}
+.path h4{font-family:'Cormorant',serif;font-weight:400;font-size:clamp(18px,1.9vw,25px);margin-bottom:1.4vh}
+.path p{font-size:clamp(13px,1.15vw,15.5px);line-height:1.7;color:#4a504c}
+.path ul{list-style:none;margin-top:1.6vh;display:flex;flex-wrap:wrap;gap:7px}
+.path li{font-family:'Jost',sans-serif;font-weight:300;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--green);border:1px solid #d9e6e0;border-radius:100px;padding:6px 12px}
+
+/* studio 52 */
+#s-52{background:var(--deepgreen);color:#efeee8}
+#s-52 .eyebrow{color:var(--aqua)}
+.orbit-wrap{position:relative;width:min(380px,54vw);aspect-ratio:1;margin:2.5vh auto 0}
+.orbit-ring{position:absolute;inset:0;border:1px solid rgba(207,213,197,.22);border-radius:50%}
+.orbit-ring.r2{inset:16%}
+.flower{position:absolute;inset:37%;display:flex;align-items:center;justify-content:center}
+.flower svg{animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+.node{position:absolute;width:110px;text-align:center;transform:translate(-50%,-50%);
+  font-family:'Jost',sans-serif;font-weight:300;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(239,238,232,.78)}
+.node::before{content:"";display:block;width:6px;height:6px;border-radius:50%;
+  background:var(--aqua);margin:0 auto 8px;box-shadow:0 0 12px rgba(127,196,189,.6)}
+.orbit-cap{text-align:center;font-style:italic;font-size:clamp(13px,1.35vw,18px);
+  color:rgba(239,238,232,.85);margin-top:2.5vh}
+
+/* ask */
+#s-ask{background:var(--sand)}
+.ask-wrap{display:grid;grid-template-columns:44% 56%;gap:4.5vw;align-items:center;max-width:1160px}
+.ask-wrap .ph{aspect-ratio:4/3;box-shadow:0 26px 70px -34px rgba(23,26,24,.4)}
+.ask-line{font-family:'Cormorant',serif;font-weight:300;font-size:clamp(22px,3vw,42px);line-height:1.35}
+.ask-line em{font-style:italic;color:var(--green)}
+
+/* closing */
+.close-lines h2{font-size:clamp(24px,3.4vw,48px);line-height:1.45;font-weight:300}
+.close-lines h2 em{font-style:italic;color:var(--green)}
+
+/* chrome */
+.chrome{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;align-items:center;
+  justify-content:space-between;padding:15px 24px;pointer-events:none;transition:opacity .6s}
+.chrome.hidden{opacity:0}
+.progress{flex:1;height:1px;background:#e4e0d4;margin:0 20px;position:relative}
+.progress .bar{position:absolute;left:0;top:0;bottom:0;background:var(--gold);width:0;transition:width .8s ease}
+.ch-label{font-family:'Jost',sans-serif;font-weight:300;font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:#a4a89f;min-width:140px}
+.ch-label.r{text-align:right}
+body.dark-chrome .ch-label{color:rgba(239,238,232,.5)}
+body.dark-chrome .progress{background:rgba(255,255,255,.15)}
+.navzone{position:fixed;top:0;bottom:0;width:16%;z-index:40;cursor:pointer}
+.navzone.prev{left:0}.navzone.next{right:0}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .slide .st,.rbar{opacity:1;transform:none}
+  .line-field img{transform:none}
+}
+@media (max-width:760px){
+  .line-wrap{grid-template-columns:1fr}
+  .line-field{min-height:36vh}
+  .line-copy{padding:4vh 8vw}
+  .craft,.gates,.worktable{grid-template-columns:1fr;gap:12px}
+  .rev{height:auto;grid-template-columns:1fr;gap:18px}
+  .rbar{height:60px!important;margin:0}
+  .paths,.codes,.cross-wrap,.tier-wrap,.ask-wrap{grid-template-columns:1fr;gap:20px}
+  #s-martha .m-grid{grid-template-columns:1fr;gap:24px}
+  .cross-wrap .ph{aspect-ratio:4/3;max-height:34vh}
+  .gap{height:290px}.gap .pole{width:118px}
+  .slide{padding:5vh 7vw}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ================= 0 · INTRO FILM ================= -->
+<section class="slide active" id="film" data-chapter="Élan Brady — a film" data-dark="1">
+  <div class="fs on" id="f1">
+    <div class="bg"><img src="./assets/texas-sky.webp" alt="Moon over a Texas desert ridge before sunrise"></div>
+    <div class="f-cap">Texas · before sunrise</div>
+  </div>
+  <div class="fs" id="f2" style="background:#000">
+    <div class="f-q">What if jewelry could tell the story of Texas the way the great houses tell the story of Paris?</div>
+  </div>
+  <div class="fs" id="f3">
+    <div class="light"></div>
+    <div class="f-doors"><div class="p l"></div><div class="p r"></div></div>
+    <div class="fmark">
+      <div class="wordmark on-dark">
+        <span class="elan"><span class="e">E<svg viewBox="0 0 40 16"><path d="M2 11 C 9 3, 15 3, 21 9 S 33 14, 38 6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>LAN</span>
+        <span class="brady">Brady</span>
+        <span class="atelier">ATELIER&nbsp;&nbsp;TX</span>
+      </div>
+    </div>
+  </div>
+  <div class="fs" id="f4">
+    <div class="f-strip">
+      <div class="band"><img src="./assets/dallas-pearls.webp" alt="DFW line pearl moodboard"><span>DFW</span></div>
+      <div class="band"><img src="./assets/austin-tray.webp" alt="Austin line collected jewelry trays"><span>Austin</span></div>
+      <div class="band"><img src="./assets/houston-tech.webp" alt="Houston line necklace design board"><span>Houston</span></div>
+      <div class="band"><img src="./assets/gulf-silver.webp" alt="Gulf Coast line connector design board"><span>Gulf&nbsp;Coast</span></div>
+      <div class="band"><img src="./assets/texas-sky.webp" alt="South Texas big sky"><span>South&nbsp;Texas</span></div>
+    </div>
+    <div class="f-cap">Five Texas lines · one connected collection</div>
+  </div>
+  <div class="fs" id="f5">
+    <div>
+      <div class="f-thresh">Come see what <em>belongs together.</em></div>
+      <div class="f-sub">DFW · Austin · Houston · Gulf Coast · South Texas — joined at the Crossroads</div>
+    </div>
+  </div>
+  <button class="skip" id="skipBtn">Skip film →</button>
+  <div class="tapnote">Tap anywhere to advance</div>
+</section>
+
+<!-- ================= 1 · TITLE ================= -->
+<section class="slide center" data-chapter="The House">
+  <div class="inner">
+    <div class="st d1 quiet" style="margin-bottom:4vh">A future luxury jewelry house · Texas</div>
+    <div class="st d2">
+      <div class="wordmark">
+        <span class="elan"><span class="e">E<svg viewBox="0 0 40 16"><path d="M2 11 C 9 3, 15 3, 21 9 S 33 14, 38 6" fill="none" stroke="#171A18" stroke-width="1.6" stroke-linecap="round"/></svg></span>LAN</span>
+        <span class="brady">Brady</span>
+      </div>
+    </div>
+    <div class="st d3 hair"></div>
+    <p class="st d4 lede" style="font-size:clamp(15px,1.55vw,21px)">Élan Brady creates modern heirlooms inspired by <em style="color:var(--green)">the places we love</em>, <em style="color:var(--green)">the stories we carry</em>, and <em style="color:var(--green)">the faith that connects us</em> — expressed through excellence, never through slogans. One jewelry language, five Texas expressions, every piece made to connect — so a collection grows as beautifully as a story does.</p>
+    <div class="st d5 quiet" style="margin-top:4vh;color:var(--green)">DFW · Austin · Houston · Gulf Coast · South Texas</div>
+  </div>
+</section>
+
+<!-- ================= 2 · PHILOSOPHY ================= -->
+<section class="slide center" data-chapter="Ch 1 · Philosophy">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">01</span> &nbsp; The Philosophy</div>
+    <h1><span class="st d2" style="display:block">Not a jewelry company.</span>
+        <span class="st d3 big-i" style="display:block;color:var(--green)">A collecting house.</span>
+        <span class="st d4" style="display:block">Jewelry is the first collection.</span></h1>
+    <div class="st d5 hair"></div>
+    <p class="st d6 lede">Modern heirlooms — pieces designed to gain meaning, not lose it. Objects that feel as if they already had a life before you found them. One belief holds the house: <em>beautiful things belong together.</em> People. Stones. Stories. Generations.</p>
+  </div>
+</section>
+
+<!-- ================= 3 · OPPORTUNITY ================= -->
+<section class="slide" data-chapter="Ch 2 · The Opportunity">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">02</span> &nbsp; The Opportunity</div>
+    <h2 class="st d2">Most fine jewelry is finished<br>the day you buy it.</h2>
+    <div class="gap">
+      <div class="axis"></div>
+      <div class="pole l st d3"><h3>Disposable</h3><p>Fashion jewelry — worn out, not worn in.</p></div>
+      <div class="pole r st d4"><h3>Untouchable</h3><p>Fine jewelry — behind glass, one necklace forever.</p></div>
+      <div class="bloom"><h3>A collection that grows</h3><p>individuality · flexibility · meaning · inheritance</p></div>
+    </div>
+    <p class="st d6 lede" style="margin-top:1.5vh">In between is what people actually want: pieces with meaning that change with a life — and get handed to the next one. That gap is where this house is built.</p>
+  </div>
+</section>
+
+<!-- ================= 4 · THE CROSSROADS ================= -->
+<section class="slide" data-chapter="Ch 3 · The Crossroads">
+  <div class="inner">
+    <div class="cross-wrap">
+      <div class="ph st d2">
+        <img src="./assets/connectors-gold.webp" alt="The Élan Brady connector collection — Hill Country, Austin, Dallas, Gulf Coast, South Texas and Signature connectors on gold chains" style="object-position:center top">
+        <div class="cap">The connector collection · one signature across every line</div>
+      </div>
+      <div>
+        <div class="st d1 eyebrow"><span class="n">03</span> &nbsp; The Signature System — The Crossroads</div>
+        <h2 class="st d3">One jewelry language.<br><span class="big-i" style="color:var(--green)">Many expressions.</span></h2>
+        <div class="st d4 parts"><span>Strand</span><span>Connector</span><span>Centerpiece</span><span>Charm</span></div>
+        <p class="st d5 lede" style="max-width:44ch">Every strand, connector, centerpiece and charm the house ever makes speaks to every piece that came before it. The Crossroads is not a sixth line — it is the signature that runs through all five.</p>
+        <p class="st d6 cross-note" style="margin-top:2.6vh">The engineering is invisible · the beauty is not<br>Compatibility is handled for you</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5–9 · FIVE LINES ================= -->
+<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · DFW">
+  <div class="line-wrap">
+    <div class="line-field"><img src="./assets/dallas-pearls.webp" alt="DFW line — pearls, gold and onyx moodboard" style="object-position:center top">
+      <div class="lname st d1"><span class="idx">LINE I OF V</span><h2>DFW</h2></div></div>
+    <div class="line-copy">
+      <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Polish · Contrast · Evening ease</div>
+      <div class="st d3 promise">Pearls without preciousness.</div>
+      <div class="st d4 mats"><span>Baroque pearl</span><span>Black onyx</span><span>Fine gold</span><span>Diamond</span><span>Pale aquamarine</span><span>Polished silver</span></div>
+      <p class="st d5 worldnote">Blue hour over the metroplex — glass, headlights, a table waiting. Worn with white shirts, denim, black knit, tailored jackets. Pearls you actually live in.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · Austin">
+  <div class="line-wrap">
+    <div class="line-field"><img src="./assets/austin-tray.webp" alt="Austin line — collected trays of turquoise, charms and vintage pieces">
+      <div class="lname st d1"><span class="idx">LINE II OF V</span><h2>AUSTIN</h2></div></div>
+    <div class="line-copy">
+      <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Eclectic · Collected · A little off-center</div>
+      <div class="st d3 promise">The unexpected piece that makes the outfit.</div>
+      <div class="st d4 mats"><span>Silk</span><span>Chain</span><span>Charms</span><span>Aquamarine</span><span>Green stones</span><span>Brass</span><span>Vintage forms</span></div>
+      <p class="st d5 worldnote">Color and music, asymmetry on purpose. Washed denim, patterned shirts, linen. The piece you found along the way.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · Houston">
+  <div class="line-wrap">
+    <div class="line-field"><img src="./assets/houston-tech.webp" alt="Houston line — chain and center connector necklace design board" style="object-position:38% center">
+      <div class="lname st d1"><span class="idx">LINE III OF V</span><h2>HOUSTON</h2></div></div>
+    <div class="line-copy">
+      <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Architectural · Fine · Considered</div>
+      <div class="st d3 promise">Fine jewelry with color, structure and daily wearability.</div>
+      <div class="st d4 mats"><span>Recycled 18k gold</span><span>Emerald</span><span>Sapphire</span><span>Peridot</span><span>Salt &amp; pepper diamond</span><span>Disclosed lab diamond</span></div>
+      <p class="st d5 worldnote">The fine-jewelry voice of the house — gemstone mosaics on architectural gold, roughly 80% expressive stone, 20% precious punctuation. Made for daily life, not the vault.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · Gulf Coast">
+  <div class="line-wrap">
+    <div class="line-field"><img src="./assets/gulf-filigree.webp" alt="Gulf Coast line — filigree connector with turquoise, aquamarine and pearl strands" style="object-position:70% center">
+      <div class="lname st d1"><span class="idx">LINE IV OF V</span><h2>GULF&nbsp;COAST</h2></div></div>
+    <div class="line-copy">
+      <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Water · Light · Ease</div>
+      <div class="st d3 promise">Light on water, made wearable.</div>
+      <div class="st d4 mats"><span>Aquamarine</span><span>Pearl</span><span>Mother of pearl</span><span>White &amp; pale gold</span><span>Sea-glass greens</span><span>Silver</span></div>
+      <p class="st d5 worldnote">The water line — aquamarine and pearl luster, pale golds, movement like light through the shallows. Linen, bare shoulders, salt air.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · South Texas">
+  <div class="line-wrap">
+    <div class="line-field"><img src="./assets/texas-sky.webp" alt="South Texas — moon over desert mountains and sun-worn grassland">
+      <div class="lname st d1"><span class="idx">LINE V OF V</span><h2>SOUTH&nbsp;TEXAS</h2></div></div>
+    <div class="line-copy">
+      <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Big sky · Sun-worn · Sculptural calm</div>
+      <div class="st d3 promise">Regional material made modern.</div>
+      <div class="st d4 mats"><span>Turquoise</span><span>Sterling</span><span>Oxidized sterling</span><span>Leather</span><span>Rough stones</span><span>Gold accents</span></div>
+      <p class="st d5 worldnote">Turquoise and sterling, sculptural links, sun and distance. Modern regional character — never costume, never cliché.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 · MARTHA ================= -->
+<section class="slide" id="s-martha" data-chapter="The Capsule · Martha" data-dark="1">
+  <div class="m-grid">
+    <div>
+      <div class="st d1 quiet">The one-of-one capsule</div>
+      <div class="st d2 m-name">Martha</div>
+      <div class="st d3 hair"></div>
+      <p class="st d4 lede">Where the house plays. Singular, high-art pieces made once and never repeated — the wildest ideas, the rarest stones, the compositions too personal to produce. Martha is provenance-forward, collector-priced, and pure joy: proof that a disciplined house can still make art for art's sake.</p>
+      <div class="st d5 quiet" style="margin-top:3.5vh;color:rgba(239,238,232,.5)">One of one · By invitation &amp; occasion · The soul of the worktable</div>
+    </div>
+    <div class="st d3 m-plate">
+      <img src="./assets/medallion-connector.webp" alt="Hand-drawn Élan connector centerpiece — oxidized silver lace petals around a 14k gold dome">
+      <div class="cap">From the worktable · connector / centerpiece study</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11 · MATERIAL TIERS ================= -->
+<section class="slide" data-chapter="Ch 5 · Material Strategy">
+  <div class="inner">
+    <div class="tier-wrap">
+      <div>
+        <div class="st d1 eyebrow"><span class="n">05</span> &nbsp; Material Strategy</div>
+        <h2 class="st d2">Four honest tiers.<br><span class="big-i" style="color:var(--green)">Nothing is called gold that isn't.</span></h2>
+        <div class="tiers">
+          <div class="tier st d3"><h4>Élan Brady Fine</h4><p>Recycled solid 18k gold · precious &amp; fine gemstones · natural / lab always disclosed</p></div>
+          <div class="tier st d4"><h4>Élan Brady Gold</h4><p>Solid 14k gold · natural stones · disclosed lab diamonds · the daily fine tier</p></div>
+          <div class="tier st d5"><h4>Élan Brady Mixed Metal</h4><p>Sterling &amp; oxidized sterling · solid gold accents · expressive stones, pearls, turquoise</p></div>
+          <div class="tier st d6"><h4>Élan Brady Studio</h4><p>Gold-filled · vermeil · silk · leather · brass — accurately disclosed, never called solid gold</p></div>
+        </div>
+        <p class="st d7 tier-cap">An 18k centerpiece + a 14k connector + a silk strand — each honest at its own tier. That is what makes luxury approachable without ever compromising trust.</p>
+      </div>
+      <div class="ph st d4" style="aspect-ratio:4/5;max-height:66vh">
+        <img src="./assets/filigree-suite.webp" alt="Élan Brady gold suite — connector, earrings, bracelet and rings in solid gold" style="object-position:center">
+        <div class="cap">The gold suite · connector, earrings, bracelet, ring</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 12 · PRODUCTION ================= -->
+<section class="slide" data-chapter="Ch 6 · Production">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">06</span> &nbsp; Production — built for low minimums</div>
+    <h2 class="st d2">Old craft and new engineering,<br>in the same piece.</h2>
+    <div class="craft">
+      <div class="c st d3"><div class="where">Texas · The Studio</div><h4>Designed &amp; made by hand</h4><p>Every piece begins at Jeni's bench. Studio-made work ships from day one at MOQ of one — the highest-margin, fastest-learning tier of the house.</p></div>
+      <div class="c st d4"><div class="where">Porto · Portugal</div><h4>Small-lot partnership</h4><p>Goldsmiths in Porto for casting, setting and hand finishing — repeatable excellence in solid gold and sterling at genuinely small production lots, so inventory risk stays low.</p></div>
+      <div class="c st d5"><div class="where">Specialist Partner</div><h4>Precision engineering</h4><p>3D-precision specialists produce the invisible architecture: connector bodies, master patterns, moving parts — engineered once, reused across every line forever.</p></div>
+    </div>
+    <div class="worktable">
+      <div class="frame st d5"><img src="./assets/dallas-clip.webp" alt="Dallas line interchangeable clip engineering drawing"></div>
+      <div class="frame st d6"><img src="./assets/houston-modular.webp" alt="Houston line hidden bar connector mechanism drawing"></div>
+      <div class="frame st d7"><img src="./assets/heritage-ring.webp" alt="Heritage oval ring OEM-ready specification sheet"></div>
+    </div>
+    <div class="st d8 worktable-cap">Already on the worktable — connection mechanisms, hidden-bar engineering, and OEM-ready specification sheets</div>
+  </div>
+</section>
+
+<!-- ================= 13 · STARTUP GATES ================= -->
+<section class="slide" data-chapter="Ch 7 · Startup Investment">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">07</span> &nbsp; What it takes to start — staged, never all at risk</div>
+    <h2 class="st d2">Three gates. <span class="big-i" style="color:var(--green)">Each one earns the next.</span></h2>
+    <div class="gates">
+      <div class="gate st d3">
+        <div class="gn">Gate 1 · Months 0–4</div>
+        <h4>Prove it</h4><div class="amt">$18–25K</div>
+        <ul>
+          <li>Connector engineering &amp; masters <b>$6–8K</b></li>
+          <li>10–12 prototypes, small-lot <b>$5–7K</b></li>
+          <li>Wear testing &amp; QA <b>$1–2K</b></li>
+          <li>Brand film, photography v1 <b>$3–4K</b></li>
+          <li>Website v1 (built in-house + AI) <b>$3–4K</b></li>
+        </ul>
+        <div class="unlock">Unlocks: a tested system and a launchable brand.</div>
+      </div>
+      <div class="gate hot st d4">
+        <div class="gn">Gate 2 · Months 4–8</div>
+        <h4>Launch</h4><div class="amt">$45–60K</div>
+        <ul>
+          <li>35-SKU inventory, low MOQ (3–8/SKU) <b>$22–30K</b></li>
+          <li>Packaging, 250 units <b>$4–5K</b></li>
+          <li>Launch photography &amp; content <b>$5–7K</b></li>
+          <li>Legal · trademark · insurance <b>$4–6K</b></li>
+          <li>Launch marketing &amp; events <b>$10–12K</b></li>
+        </ul>
+        <div class="unlock">Unlocks: revenue — the first collection on real necks.</div>
+      </div>
+      <div class="gate st d5">
+        <div class="gn">Gate 3 · Months 9–18</div>
+        <h4>Scale</h4><div class="amt">$55–75K</div>
+        <ul>
+          <li>Expand to 50 SKUs + restock winners <b>$30–40K</b></li>
+          <li>First accessories (belts, silk, leather) <b>$8–10K</b></li>
+          <li>Events &amp; collector program <b>$7–10K</b></li>
+          <li>Paid media, tested small <b>$10–15K</b></li>
+        </ul>
+        <div class="unlock">Unlocked only by Gate-2 sell-through proof.</div>
+      </div>
+    </div>
+    <div class="st d6 fineprint">Planning estimates, pre-quote · low-MOQ strategy throughout · staged release means capital is never all at risk at once · total staged: ~$120–160K</div>
+  </div>
+</section>
+
+<!-- ================= 14 · REVENUE MODEL ================= -->
+<section class="slide" data-chapter="Ch 8 · Revenue Model">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">08</span> &nbsp; Three-year revenue expectations — best-guess planning model</div>
+    <h2 class="st d2">Grown the way a collection grows.</h2>
+    <div class="rev">
+      <div class="rcol st d3 rc1">
+        <div class="rbar rb1"><div class="rv">$180–300K</div></div>
+        <div class="rmeta"><h4>Year One</h4><p>35 SKUs · launch mid-year · DTC only · AOV ≈ $425 · ~550 orders · community begins</p></div>
+      </div>
+      <div class="rcol st d4 rc2">
+        <div class="rbar rb2"><div class="rv">$520–750K</div></div>
+        <div class="rmeta"><h4>Year Two</h4><p>50 SKUs · ~30% repeat rate · connector ecosystem compounds · events &amp; first accessories</p></div>
+      </div>
+      <div class="rcol st d5 rc3">
+        <div class="rbar rb3"><div class="rv">$1.2–1.6M</div></div>
+        <div class="rmeta"><h4>Year Three</h4><p>Accessories + first clothing capsule · wholesale pilot · collector community · Martha releases</p></div>
+      </div>
+    </div>
+    <div class="st d6 fineprint" style="margin-top:3vh">Blended gross margin target 58–65% · connectors are the highest-margin, most-repeated purchase · estimates, pre-verification — the model earns its numbers gate by gate</div>
+  </div>
+</section>
+
+<!-- ================= 15 · GROWTH PATH ================= -->
+<section class="slide center" data-chapter="Ch 9 · The Growth Path">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">09</span> &nbsp; One language, growing categories</div>
+    <h2 class="st d2">Every new category speaks<br><span class="big-i" style="color:var(--green)">the language it was born into.</span></h2>
+    <div class="gpath">
+      <div class="gstep st d3"><h5>35 SKUs</h5><p>Launch · Year 1</p></div>
+      <div class="garr st d3">→</div>
+      <div class="gstep st d4"><h5>50 SKUs</h5><p>Depth · Year 2</p></div>
+      <div class="garr st d4">→</div>
+      <div class="gstep st d5"><h5>Accessories</h5><p>Belts · Silk · Leather</p></div>
+      <div class="garr st d5">→</div>
+      <div class="gstep st d6"><h5>Clothing</h5><p>First capsule · Year 3</p></div>
+    </div>
+    <p class="st d7 lede" style="margin-top:4vh">Because the connector language is shared, a belt, a silk scarf, even a linen shirt can carry the same hardware — every category multiplies the value of every piece a collector already owns. And Martha crowns it all: one-of-one art that keeps the house dreaming in public.</p>
+  </div>
+</section>
+
+<!-- ================= 16 · BRAND CODES ================= -->
+<section class="slide" data-chapter="Ch 10 · The Brand">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">10</span> &nbsp; The Brand — already dressed for the part</div>
+    <h2 class="st d2">The house has its codes:<br><span class="big-i" style="color:var(--green)">linen, mineral mist, atelier green, ink.</span></h2>
+    <div class="codes">
+      <div class="frame st d3"><img src="./assets/brand-guide.webp" alt="Élan Brady brand guide — wordmark, palette, typography, logo usage and material expression"></div>
+      <div class="frame st d4"><img src="./assets/packaging.webp" alt="Élan Brady packaging — mineral mist box with atelier green base and branded ribbon"></div>
+    </div>
+    <div class="st d5 fineprint" style="margin-top:2.4vh">Wordmark · palette · typography · packaging — designed once, worn everywhere the house goes</div>
+  </div>
+</section>
+
+<!-- ================= 17 · THE OPEN STUDIO ================= -->
+<section class="slide" data-chapter="Ch 11 · The Open Studio">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n">11</span> &nbsp; The Open Studio</div>
+    <h2 class="st d2">The website is not a store.<br><span class="big-i" style="color:var(--green)">It's the studio with the door left open.</span></h2>
+    <div class="paths">
+      <div class="path warm st d3">
+        <h4>Wander</h4>
+        <p>Enter through the deep-green door. Hear the studio before you see it. Open drawers, gather a handful of pearls and stones into your own tray, hear the stories, build a piece — the system quietly handles what fits.</p>
+        <ul><li>Step into the studio</li><li>Pick up a handful</li><li>My Collection</li><li>Build</li><li>Drop a hint</li><li>Gather with us</li></ul>
+      </div>
+      <div class="path st d4">
+        <h4>Or buy in seconds</h4>
+        <p>The immersion is always optional. A ready-to-buy customer reaches product, price, availability, cart and checkout from anywhere in one tap. The door never blocks the till.</p>
+        <ul><li>Shop</li><li>Price &amp; availability</li><li>Cart</li><li>Checkout</li><li>Gifting</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 18 · STUDIO 52 ================= -->
+<section class="slide center" id="s-52" data-chapter="Ch 12 · Studio 52" data-dark="1">
+  <div class="inner">
+    <div class="st d1 eyebrow"><span class="n" style="color:var(--gold)">12</span> &nbsp; Studio 52 — the hidden headquarters</div>
+    <h2 class="st d2" style="color:#efeee8">Everything moves.<br><span class="big-i" style="color:var(--aqua)">Only what matters reaches the founder.</span></h2>
+    <div class="orbit-wrap st d3">
+      <div class="orbit-ring"></div><div class="orbit-ring r2"></div>
+      <div class="node" style="left:50%;top:0%">RESEARCH</div>
+      <div class="node" style="left:97%;top:33%">MANUFACTURING</div>
+      <div class="node" style="left:79%;top:92%">OPERATIONS</div>
+      <div class="node" style="left:21%;top:92%">MARKETING</div>
+      <div class="node" style="left:3%;top:33%">FINANCE</div>
+      <div class="flower">
+        <svg viewBox="0 0 100 100" width="82" height="82" aria-label="Élan Brady flower emblem">
+          <defs><linearGradient id="sage" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#8F9789"/><stop offset=".55" stop-color="#CDD3C5"/><stop offset="1" stop-color="#EBEFE6"/>
+          </linearGradient></defs>
+          <g fill="none" stroke="url(#sage)" stroke-width="2.2" stroke-linecap="round">
+            <path d="M50 50 C 40 30, 46 16, 50 12 C 54 16, 60 30, 50 50"/>
+            <path d="M50 50 C 70 40, 84 46, 88 50 C 84 54, 70 60, 50 50"/>
+            <path d="M50 50 C 60 70, 54 84, 50 88 C 46 84, 40 70, 50 50"/>
+            <path d="M50 50 C 30 60, 16 54, 12 50 C 16 46, 30 40, 50 50"/>
+            <circle cx="50" cy="50" r="5"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <p class="st d4 orbit-cap">A coordinated AI intelligence runs the research, vendors, numbers, calendar and follow-ups —<br>and surfaces only the few decisions that need a founder's judgment.<br>
+    <span style="font-style:normal;font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:.2em;color:rgba(239,238,232,.5)">SO THE FOUNDER'S HANDS STAY ON THE WORK — NOT THE PAPERWORK</span></p>
+  </div>
+</section>
+
+<!-- ================= 19 · THE ASK ================= -->
+<section class="slide" id="s-ask" data-chapter="The First Yes">
+  <div class="ask-wrap">
+    <div class="ph st d2">
+      <img src="./assets/family.webp" alt="The Brady family in a Texas flower garden at golden hour">
+      <div class="cap">The reason the house exists at all</div>
+    </div>
+    <div>
+      <div class="st d1 quiet" style="margin-bottom:3.5vh;color:var(--green)">The first yes</div>
+      <div class="ask-line">
+        <span class="st d3" style="display:block;margin-bottom:2.2vh">Gate one is <em>$18–25K</em> and six months.</span>
+        <span class="st d4" style="display:block;margin-bottom:2.2vh">Not the whole dream — just the proof of it.</span>
+        <span class="st d5" style="display:block">And the first partner this house wants <em>is you.</em></span>
+      </div>
+      <div class="st d6 hair" style="margin:4vh 0 0"></div>
+      <div class="st d7 quiet" style="margin-top:2.5vh">Prototypes in hand · the film made · the door built · then we decide gate two together</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 20 · CLOSING ================= -->
+<section class="slide center" data-chapter="Closing">
+  <div class="inner close-lines">
+    <h2><span class="st d2" style="display:block;margin-bottom:2.4vh">Some brands make jewelry.</span>
+        <span class="st d4" style="display:block;margin-bottom:2.4vh">Some brands sell luxury.</span>
+        <span class="st d6" style="display:block"><em>Élan Brady gathers stories.</em></span></h2>
+  </div>
+</section>
+
+<!-- ================= 21 · FINAL MARK ================= -->
+<section class="slide center" data-chapter="">
+  <div class="inner">
+    <div class="st d2">
+      <div class="wordmark">
+        <span class="elan"><span class="e">E<svg viewBox="0 0 40 16"><path d="M2 11 C 9 3, 15 3, 21 9 S 33 14, 38 6" fill="none" stroke="#171A18" stroke-width="1.6" stroke-linecap="round"/></svg></span>LAN</span>
+        <span class="brady">Brady</span>
+        <span class="atelier">ATELIER&nbsp;&nbsp;TX</span>
+      </div>
+    </div>
+    <div class="st d5 quiet" style="margin-top:6vh">Come see what belongs together</div>
+  </div>
+</section>
+
+</div>
+
+<div class="chrome hidden" id="chrome">
+  <div class="ch-label" id="chLabel"></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="ch-label r" id="counter"></div>
+</div>
+<div class="navzone prev" id="zPrev" aria-label="Previous"></div>
+<div class="navzone next" id="zNext" aria-label="Next"></div>
+
+<script>
+(function(){
+/* visible error reporting — never a silent black screen */
+window.onerror=function(msg){
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:999;background:#F4F1EA;color:#171A18;font:13px/1.5 sans-serif;padding:12px 16px;border:1px solid #B8912F;border-radius:8px';
+  d.textContent='Something went wrong loading the presentation: '+msg;
+  document.body.appendChild(d);
+};
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- deck ---------- */
+const slides=[...document.querySelectorAll('.slide')];
+const bar=document.getElementById('bar'),chLabel=document.getElementById('chLabel'),
+      counter=document.getElementById('counter'),chrome=document.getElementById('chrome');
+let i=0, filmDone=false, filmTimers=[];
+
+function show(n){
+  n=Math.max(0,Math.min(slides.length-1,n));
+  if(n===i && slides[i].classList.contains('active') && n!==0)return;
+  slides[i].classList.remove('active');
+  i=n;
+  slides[i].classList.add('active');
+  bar.style.width=(i/(slides.length-1)*100)+'%';
+  chLabel.textContent=slides[i].dataset.chapter||'';
+  counter.textContent=(i+1)+' / '+slides.length;
+  document.body.classList.toggle('dark-chrome',slides[i].dataset.dark==='1');
+  chrome.classList.toggle('hidden', i===0);
+}
+
+/* ---------- film timeline ---------- */
+const f=[1,2,3,4,5].map(n=>document.getElementById('f'+n));
+let filmScene=0, filmManual=false;
+function setScene(k){
+  filmScene=k;
+  f.forEach((el,idx)=>el.classList.toggle('on',idx===k));
+  document.getElementById('film').classList.toggle('lightmode',k===4);
+  if(k===2){setTimeout(()=>document.getElementById('f3').classList.add('open'),1300);}
+}
+function runFilm(){
+  setScene(0);
+  const T=(ms,fn)=>filmTimers.push(setTimeout(()=>{if(!filmManual)fn();},ms));
+  T(6500,()=>setScene(1));
+  T(13500,()=>setScene(2));
+  T(21500,()=>setScene(3));
+  T(29500,()=>setScene(4));
+  T(37000,endFilm);
+}
+function stepFilm(){
+  filmManual=true;
+  filmTimers.forEach(clearTimeout);filmTimers=[];
+  if(filmScene>=4){endFilm();return;}
+  setScene(filmScene+1);
+}
+function endFilm(){
+  if(filmDone)return;
+  filmDone=true;
+  filmTimers.forEach(clearTimeout);filmTimers=[];
+  show(1);
+}
+document.getElementById('skipBtn').addEventListener('click',e=>{e.stopPropagation();endFilm();});
+
+/* ---------- nav: tap or click ANYWHERE advances ---------- */
+function next(){ if(i===0){stepFilm();return;} show(i+1); }
+function prev(){ if(i<=1){return;} show(i-1); }
+document.getElementById('zPrev').addEventListener('click',e=>{e.stopPropagation();prev();});
+document.addEventListener('click',e=>{
+  if(e.target.closest('.skip'))return;
+  next();
+});
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(e.key)){e.preventDefault();next();}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();prev();}
+  if(e.key==='Home'){filmDone=true;filmTimers.forEach(clearTimeout);show(1);}
+  if(e.key==='End')show(slides.length-1);
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(tx===null)return;
+  const dx=e.changedTouches[0].clientX-tx;
+  if(dx>50){prev();}
+  tx=null;
+},{passive:true});
+
+/* boot */
+show(0);
+if(reduced){ setScene(0); } else { runFilm(); }
+})();
+</script>
+</body>
+</html>
