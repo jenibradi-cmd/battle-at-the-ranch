@@ -310,10 +310,28 @@ h2{font-size:clamp(26px,4vw,54px)}
 
 /* ask */
 #s-ask{background:var(--sand)}
-.ask-wrap{display:grid;grid-template-columns:44% 56%;gap:4.5vw;align-items:center;max-width:1160px}
-.ask-wrap .ph{aspect-ratio:4/3;box-shadow:0 26px 70px -34px rgba(23,26,24,.4)}
-.ask-line{font-family:'Cormorant',serif;font-weight:300;font-size:clamp(22px,3vw,42px);line-height:1.35}
+.ask-line{font-family:'Cormorant',serif;font-weight:300;font-size:clamp(26px,3.8vw,52px);line-height:1.35}
 .ask-line em{font-style:italic;color:var(--green)}
+
+/* the name */
+.name-wrap{display:grid;grid-template-columns:44% 56%;gap:4.5vw;align-items:center;max-width:1160px}
+.name-wrap .ph{aspect-ratio:4/3;box-shadow:0 26px 70px -34px rgba(23,26,24,.4)}
+.name-math{font-family:'Cormorant',serif;font-weight:300;
+  font-size:clamp(26px,3.4vw,48px);letter-spacing:.12em;margin:2.4vh 0 0;white-space:nowrap}
+.name-math .dim{color:#c6c1b2}
+.name-math .hl{color:var(--green)}
+.name-math .eq{color:var(--gold);padding:0 .3em;font-size:.75em}
+.name-note{font-family:'Jost',sans-serif;font-weight:300;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:#8d938f;margin-top:1.2vh}
+.defn{background:var(--sand);border-left:3px solid var(--gold);border-radius:8px;
+  padding:18px 22px;max-width:54ch;margin-top:3vh}
+.defn .word{font-family:'Cormorant',serif;font-style:italic;font-weight:400;
+  font-size:clamp(19px,2vw,26px)}
+.defn .pron{font-family:'Jost',sans-serif;font-weight:300;font-size:12px;color:#8d938f;
+  letter-spacing:.08em;padding-left:10px}
+.defn p{font-size:clamp(13.5px,1.2vw,16px);line-height:1.65;color:#4a504c;margin-top:6px}
+.name-tx{font-style:italic;font-size:clamp(14px,1.4vw,18.5px);line-height:1.75;
+  color:#3a3f3c;margin-top:3vh;max-width:48ch}
 
 /* closing */
 .close-lines h2{font-size:clamp(24px,3.4vw,48px);line-height:1.45;font-weight:300}
@@ -354,7 +372,12 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   .craft,.gates,.worktable{grid-template-columns:1fr;gap:12px}
   .rev{height:auto;grid-template-columns:1fr;gap:18px}
   .rbar{height:60px!important;margin:0}
-  .paths,.codes,.cross-wrap,.tier-wrap,.ask-wrap{grid-template-columns:1fr;gap:20px}
+  .paths,.codes,.cross-wrap,.tier-wrap,.name-wrap{grid-template-columns:1fr;gap:16px}
+  .name-math{font-size:clamp(22px,7vw,34px)}
+  .name-wrap .ph{aspect-ratio:21/9;max-height:24vh}
+  .name-wrap .ph .cap{display:none}
+  .defn{padding:14px 16px;margin-top:2vh}
+  .name-tx{margin-top:2vh;font-size:14px;padding-right:96px}
   #s-martha .m-grid{grid-template-columns:1fr;gap:24px}
   .cross-wrap .ph{aspect-ratio:4/3;max-height:34vh}
   .gap{height:290px}.gap .pole{width:118px}
@@ -747,21 +770,35 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
 </section>
 
 <!-- ================= 19 · THE ASK ================= -->
-<section class="slide" id="s-ask" data-chapter="The First Yes">
-  <div class="ask-wrap">
+<section class="slide center" id="s-ask" data-chapter="The First Yes">
+  <div class="inner">
+    <div class="st d1 quiet" style="margin-bottom:4vh;color:var(--green)">The first yes</div>
+    <div class="ask-line">
+      <span class="st d2" style="display:block;margin-bottom:2.5vh">Gate one is <em>$18–25K</em> and six months.</span>
+      <span class="st d3" style="display:block;margin-bottom:2.5vh">Not the whole dream — just the proof of it.</span>
+      <span class="st d4" style="display:block">And the first partner this house wants <em>is you.</em></span>
+    </div>
+    <div class="st d5 hair" style="margin:5vh auto 0"></div>
+    <div class="st d6 quiet" style="margin-top:2.5vh">Prototypes in hand · the film made · the door built · then we decide gate two together</div>
+  </div>
+</section>
+
+<!-- ================= 20 · THE NAME ================= -->
+<section class="slide" id="s-name" data-chapter="The Name · The Family">
+  <div class="name-wrap">
     <div class="ph st d2">
       <img src="./assets/family.webp" alt="The Brady family in a Texas flower garden at golden hour">
       <div class="cap">The reason the house exists at all</div>
     </div>
     <div>
-      <div class="st d1 quiet" style="margin-bottom:3.5vh;color:var(--green)">The first yes</div>
-      <div class="ask-line">
-        <span class="st d3" style="display:block;margin-bottom:2.2vh">Gate one is <em>$18–25K</em> and six months.</span>
-        <span class="st d4" style="display:block;margin-bottom:2.2vh">Not the whole dream — just the proof of it.</span>
-        <span class="st d5" style="display:block">And the first partner this house wants <em>is you.</em></span>
+      <div class="st d1 quiet" style="color:var(--green)">Where the name comes from</div>
+      <div class="st d3 name-math"><span class="hl">EL</span><span class="dim">I</span><span class="eq">+</span><span class="dim">ETH</span><span class="hl">AN</span><span class="eq">=</span>ÉLAN</div>
+      <div class="st d4 name-note">The boys named the house before it existed</div>
+      <div class="st d5 defn">
+        <span class="word">é·lan</span><span class="pron">/ ā·län / · noun · French</span>
+        <p>Energy, style, and heart — a spirit that moves forward. From <em>élancer</em>, "to rush ahead."</p>
       </div>
-      <div class="st d6 hair" style="margin:4vh 0 0"></div>
-      <div class="st d7 quiet" style="margin-top:2.5vh">Prototypes in hand · the film made · the door built · then we decide gate two together</div>
+      <p class="st d6 name-tx">From dancing in the rain at Luckenbach to fishing offshore on the Gulf Coast — Texas is part of the brand story, because it's part of ours.</p>
     </div>
   </div>
 </section>
