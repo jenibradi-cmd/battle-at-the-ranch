@@ -74,78 +74,6 @@ h2{font-size:clamp(26px,4vw,54px)}
   font-size:clamp(8px,.85vw,11px);display:block;margin-top:1.4em;padding-left:.6em;color:#6d736f}
 .wordmark.on-dark{color:#fff}.wordmark.on-dark .atelier{color:rgba(255,255,255,.6)}
 
-/* =========== INTRO FILM =========== */
-#film{background:#000;padding:0}
-.fs{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity 1.8s ease;pointer-events:none;text-align:center;padding:8vh 8vw}
-.fs.on{opacity:1}
-#f1{padding:0}
-#f1 .bg{position:absolute;inset:0;overflow:hidden}
-#f1 .bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);
-  animation:kb-slow 14s ease-out forwards}
-@keyframes kb-slow{to{transform:scale(1)}}
-#f1 .bg::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.05) 45%,rgba(0,0,0,.55))}
-.f-cap{position:relative;z-index:2;color:rgba(255,255,255,.94);font-family:'Jost',sans-serif;
-  font-weight:200;letter-spacing:.5em;text-transform:uppercase;font-size:clamp(10px,1.2vw,15px);
-  text-shadow:0 1px 24px rgba(0,0,0,.5)}
-#f1 .f-cap{position:absolute;left:0;right:0;bottom:12vh}
-.f-q{position:relative;z-index:2;font-family:'Cormorant',serif;font-style:italic;font-weight:300;
-  color:#fff;font-size:clamp(24px,3.6vw,48px);line-height:1.4;max-width:26ch}
-.f-q em{font-style:italic;color:var(--aqua)}
-.f-q .q2{display:block;margin-top:.6em;color:rgba(255,255,255,.75);
-  font-size:.72em;opacity:0;transition:opacity 1.8s ease 2.4s}
-#f2.on .q2{opacity:1}
-#f2{background:#000;padding:8vh 8vw}
-#f2 .bg{position:absolute;inset:0;overflow:hidden}
-#f2 .bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.06)}
-#f2 .bg::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 46%,rgba(6,9,8,.66),rgba(6,9,8,.5) 55%,rgba(6,9,8,.72))}
-#f2 .f-q{text-shadow:0 1px 26px rgba(0,0,0,.7)}
-#f3{background:#000}
-.f-doors{position:absolute;inset:0;display:flex}
-.f-doors .p{flex:1;background:linear-gradient(100deg,#20423a,#16302a 52%,#1d3d34)}
-.f-doors .p.l{border-right:1px solid rgba(255,255,255,.1)}
-.f-doors .p.r{border-left:1px solid rgba(0,0,0,.3)}
-.f-doors .p{transition:transform 2.8s cubic-bezier(.65,0,.25,1)}
-#f3.open .p.l{transform:translateX(-102%)}
-#f3.open .p.r{transform:translateX(102%)}
-#f3 .light{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#fdfbf5,#f0ead9 55%,#e2dbc6)}
-#f3 .fmark{position:relative;z-index:3;transition:opacity 1.5s ease}
-#f3.open .fmark{opacity:0}
-#f4{background:#0e120f;padding:0}
-.f-strip{position:absolute;inset:0;display:flex;gap:3px;background:#0e120f}
-.f-strip .band{flex:1;position:relative;overflow:hidden;
-  transform:translateY(101%);transition:transform 1.3s cubic-bezier(.2,.7,.2,1)}
-#f4.on .band{transform:none}
-#f4.on .band:nth-child(2){transition-delay:.35s}
-#f4.on .band:nth-child(3){transition-delay:.7s}
-#f4.on .band:nth-child(4){transition-delay:1.05s}
-#f4.on .band:nth-child(5){transition-delay:1.4s}
-.f-strip .band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.f-strip .band::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(10,14,11,.55),transparent 32%,transparent 55%,rgba(10,14,11,.62))}
-.f-strip .band span{position:absolute;left:0;right:0;bottom:26px;z-index:2;text-align:center;
-  color:rgba(255,255,255,.94);font-family:'Jost',sans-serif;font-weight:300;
-  letter-spacing:.32em;text-transform:uppercase;font-size:clamp(8px,.95vw,12px)}
-#f4 .f-cap{position:absolute;left:0;right:0;top:7vh;z-index:3;
-  text-shadow:0 1px 20px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.6)}
-#f5{background:var(--canvas)}
-.f-thresh{font-family:'Cormorant',serif;font-weight:300;color:var(--ink);
-  font-size:clamp(28px,4.4vw,58px);line-height:1.25}
-.f-thresh em{font-style:italic;color:var(--green)}
-.f-sub{margin-top:3vh;font-family:'Jost',sans-serif;font-weight:300;letter-spacing:.3em;
-  text-transform:uppercase;font-size:clamp(9px,1vw,12px);color:#8d938f}
-.skip{position:absolute;right:26px;bottom:24px;z-index:20;font-family:'Jost',sans-serif;
-  font-weight:300;font-size:11px;letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.25);border-radius:100px;
-  padding:10px 20px;transition:color .3s,border-color .3s}
-.skip:hover{color:#fff;border-color:rgba(255,255,255,.6)}
-#film.lightmode .skip{color:#8d938f;border-color:#d8d4c8}
-.tapnote{position:absolute;left:26px;bottom:28px;z-index:20;font-family:'Jost',sans-serif;
-  font-weight:300;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.4)}
-#film.lightmode .tapnote{color:#b9b4a6}
-
 /* =========== LINE SLIDES — real photography =========== */
 .line-slide{padding:0}
 .line-wrap{display:grid;grid-template-columns:46% 54%;position:absolute;inset:0}
@@ -395,47 +323,7 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
 
 <div class="deck" id="deck">
 
-<!-- ================= 0 · INTRO FILM ================= -->
-<section class="slide active" id="film" data-chapter="Élan Brady — a film" data-dark="1">
-  <div class="fs on" id="f1">
-    <div class="bg"><img src="./assets/texas-sky.webp" alt="Moon over a Texas desert ridge before sunrise"></div>
-    <div class="f-cap">Texas · before sunrise</div>
-  </div>
-  <div class="fs" id="f2">
-    <div class="bg"><img src="./assets/texas-sky.webp" alt="" aria-hidden="true"></div>
-    <div class="f-q">What if jewelry could tell <em>your</em> story&hellip;
-      <span class="q2">piece by piece, for generations?</span></div>
-  </div>
-  <div class="fs" id="f3">
-    <div class="light"></div>
-    <div class="f-doors"><div class="p l"></div><div class="p r"></div></div>
-    <div class="fmark">
-      <div class="wordmark on-dark">
-        <span class="elan"><span class="e">E<svg viewBox="0 0 40 16"><path d="M2 11 C 9 3, 15 3, 21 9 S 33 14, 38 6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>LAN</span>
-        <span class="brady">Brady</span>
-        <span class="atelier">ATELIER&nbsp;&nbsp;TX</span>
-      </div>
-    </div>
-  </div>
-  <div class="fs" id="f4">
-    <div class="f-strip">
-      <div class="band"><img src="./assets/dallas-pearls.webp" alt="DFW line pearl moodboard"><span>DFW</span></div>
-      <div class="band"><img src="./assets/austin-tray.webp" alt="Austin line collected jewelry trays"><span>Austin</span></div>
-      <div class="band"><img src="./assets/houston-tech.webp" alt="Houston line necklace design board"><span>Houston</span></div>
-      <div class="band"><img src="./assets/gulf-silver.webp" alt="Gulf Coast line connector design board"><span>Gulf&nbsp;Coast</span></div>
-      <div class="band"><img src="./assets/texas-sky.webp" alt="South Texas big sky"><span>South&nbsp;Texas</span></div>
-    </div>
-    <div class="f-cap">Five Texas lines · one connected collection</div>
-  </div>
-  <div class="fs" id="f5">
-    <div>
-      <div class="f-thresh">Come see what <em>belongs together.</em></div>
-      <div class="f-sub">DFW · Austin · Houston · Gulf Coast · South Texas — joined at the Crossroads</div>
-    </div>
-  </div>
-  <button class="skip" id="skipBtn">Skip film →</button>
-  <div class="tapnote">Tap anywhere to advance</div>
-</section>
+
 
 <!-- ================= 1 · TITLE ================= -->
 <section class="slide center" data-chapter="The House">
@@ -448,72 +336,31 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
       </div>
     </div>
     <div class="st d3 hair"></div>
-    <p class="st d4 lede" style="font-size:clamp(15px,1.55vw,21px)">Élan Brady creates modern heirlooms inspired by <em style="color:var(--green)">the places we love</em>, <em style="color:var(--green)">the stories we carry</em>, and <em style="color:var(--green)">the faith that connects us</em> — expressed through excellence, never through slogans. One jewelry language, five Texas expressions, every piece made to connect — so a collection grows as beautifully as a story does.</p>
+    <p class="st d4 lede" style="font-size:clamp(15px,1.55vw,21px)">Élan Brady creates modern heirlooms inspired by <em style="color:var(--green)">the places we love</em>, <em style="color:var(--green)">the stories we carry</em>, and <em style="color:var(--green)">the faith that connects us</em> — expressed through excellence. One jewelry language, five Texas expressions, every piece made to connect — so a collection grows as beautifully as a story does.</p>
     <div class="st d5 quiet" style="margin-top:4vh;color:var(--green)">DFW · Austin · Houston · Gulf Coast · South Texas</div>
   </div>
 </section>
 
-<!-- ================= 2 · PHILOSOPHY ================= -->
-<section class="slide center" data-chapter="Ch 1 · Philosophy">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">01</span> &nbsp; The Philosophy</div>
-    <h1><span class="st d2" style="display:block">Not a jewelry company.</span>
-        <span class="st d3 big-i" style="display:block;color:var(--green)">A collecting house.</span>
-        <span class="st d4" style="display:block">Jewelry is the first collection.</span></h1>
-    <div class="st d5 hair"></div>
-    <p class="st d6 lede">Modern heirlooms — pieces designed to gain meaning, not lose it. Objects that feel as if they already had a life before you found them. One belief holds the house: <em>beautiful things belong together.</em> People. Stones. Stories. Generations.</p>
-  </div>
-</section>
 
-<!-- ================= 3 · OPPORTUNITY ================= -->
-<section class="slide" data-chapter="Ch 2 · The Opportunity">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">02</span> &nbsp; The Opportunity</div>
-    <h2 class="st d2">Most fine jewelry is finished<br>the day you buy it.</h2>
-    <div class="gap">
-      <div class="axis"></div>
-      <div class="pole l st d3"><h3>Disposable</h3><p>Fashion jewelry — worn out, not worn in.</p></div>
-      <div class="pole r st d4"><h3>Untouchable</h3><p>Fine jewelry — behind glass, one necklace forever.</p></div>
-      <div class="bloom"><h3>A collection that grows</h3><p>individuality · flexibility · meaning · inheritance</p></div>
-    </div>
-    <p class="st d6 lede" style="margin-top:1.5vh">In between is what people actually want: pieces with meaning that change with a life — and get handed to the next one. That gap is where this house is built.</p>
-  </div>
-</section>
 
-<!-- ================= 4 · THE CROSSROADS ================= -->
-<section class="slide" data-chapter="Ch 3 · The Crossroads">
-  <div class="inner">
-    <div class="cross-wrap">
-      <div class="ph st d2">
-        <img src="./assets/connectors-gold.webp" alt="The Élan Brady connector collection — Hill Country, Austin, Dallas, Gulf Coast, South Texas and Signature connectors on gold chains" style="object-position:center top">
-        <div class="cap">The connector collection · one signature across every line</div>
-      </div>
-      <div>
-        <div class="st d1 eyebrow"><span class="n">03</span> &nbsp; The Signature System — The Crossroads</div>
-        <h2 class="st d3">One jewelry language.<br><span class="big-i" style="color:var(--green)">Many expressions.</span></h2>
-        <div class="st d4 parts"><span>Strand</span><span>Connector</span><span>Centerpiece</span><span>Charm</span></div>
-        <p class="st d5 lede" style="max-width:44ch">Every strand, connector, centerpiece and charm the house ever makes speaks to every piece that came before it. The Crossroads is not a sixth line — it is the signature that runs through all five.</p>
-        <p class="st d6 cross-note" style="margin-top:2.6vh">The engineering is invisible · the beauty is not<br>Compatibility is handled for you</p>
-      </div>
-    </div>
-  </div>
-</section>
+
+
+
 
 <!-- ================= 5–9 · FIVE LINES ================= -->
-<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · DFW">
+<section class="slide line-slide" data-chapter="Five Lines · DFW">
   <div class="line-wrap">
     <div class="line-field"><img src="./assets/dallas-pearls.webp" alt="DFW line — pearls, gold and onyx moodboard" style="object-position:center top">
       <div class="lname st d1"><span class="idx">LINE I OF V</span><h2>DFW</h2></div></div>
     <div class="line-copy">
       <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Polish · Contrast · Evening ease</div>
-      <div class="st d3 promise">Pearls without preciousness.</div>
       <div class="st d4 mats"><span>Baroque pearl</span><span>Black onyx</span><span>Fine gold</span><span>Diamond</span><span>Pale aquamarine</span><span>Polished silver</span></div>
       <p class="st d5 worldnote">Blue hour over the metroplex — glass, headlights, a table waiting. Worn with white shirts, denim, black knit, tailored jackets. Pearls you actually live in.</p>
     </div>
   </div>
 </section>
 
-<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · Austin">
+<section class="slide line-slide" data-chapter="Five Lines · Austin">
   <div class="line-wrap">
     <div class="line-field"><img src="./assets/austin-tray.webp" alt="Austin line — collected trays of turquoise, charms and vintage pieces">
       <div class="lname st d1"><span class="idx">LINE II OF V</span><h2>AUSTIN</h2></div></div>
@@ -526,7 +373,7 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   </div>
 </section>
 
-<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · Houston">
+<section class="slide line-slide" data-chapter="Five Lines · Houston">
   <div class="line-wrap">
     <div class="line-field"><img src="./assets/houston-tech.webp" alt="Houston line — chain and center connector necklace design board" style="object-position:38% center">
       <div class="lname st d1"><span class="idx">LINE III OF V</span><h2>HOUSTON</h2></div></div>
@@ -539,20 +386,19 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   </div>
 </section>
 
-<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · Gulf Coast">
+<section class="slide line-slide" data-chapter="Five Lines · Gulf Coast">
   <div class="line-wrap">
     <div class="line-field"><img src="./assets/gulf-filigree.webp" alt="Gulf Coast line — filigree connector with turquoise, aquamarine and pearl strands" style="object-position:70% center">
       <div class="lname st d1"><span class="idx">LINE IV OF V</span><h2>GULF&nbsp;COAST</h2></div></div>
     <div class="line-copy">
       <div class="st d2 quiet" style="margin-bottom:2vh;color:var(--green)">Water · Light · Ease</div>
-      <div class="st d3 promise">Light on water, made wearable.</div>
       <div class="st d4 mats"><span>Aquamarine</span><span>Pearl</span><span>Mother of pearl</span><span>White &amp; pale gold</span><span>Sea-glass greens</span><span>Silver</span></div>
       <p class="st d5 worldnote">The water line — aquamarine and pearl luster, pale golds, movement like light through the shallows. Linen, bare shoulders, salt air.</p>
     </div>
   </div>
 </section>
 
-<section class="slide line-slide" data-chapter="Ch 4 · Five Lines · South Texas">
+<section class="slide line-slide" data-chapter="Five Lines · South Texas">
   <div class="line-wrap">
     <div class="line-field"><img src="./assets/texas-sky.webp" alt="South Texas — moon over desert mountains and sun-worn grassland">
       <div class="lname st d1"><span class="idx">LINE V OF V</span><h2>SOUTH&nbsp;TEXAS</h2></div></div>
@@ -582,33 +428,12 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   </div>
 </section>
 
-<!-- ================= 11 · MATERIAL TIERS ================= -->
-<section class="slide" data-chapter="Ch 5 · Material Strategy">
-  <div class="inner">
-    <div class="tier-wrap">
-      <div>
-        <div class="st d1 eyebrow"><span class="n">05</span> &nbsp; Material Strategy</div>
-        <h2 class="st d2">Four honest tiers.<br><span class="big-i" style="color:var(--green)">Nothing is called gold that isn't.</span></h2>
-        <div class="tiers">
-          <div class="tier st d3"><h4>Élan Brady Fine</h4><p>Recycled solid 18k gold · precious &amp; fine gemstones · natural / lab always disclosed</p></div>
-          <div class="tier st d4"><h4>Élan Brady Gold</h4><p>Solid 14k gold · natural stones · disclosed lab diamonds · the daily fine tier</p></div>
-          <div class="tier st d5"><h4>Élan Brady Mixed Metal</h4><p>Sterling &amp; oxidized sterling · solid gold accents · expressive stones, pearls, turquoise</p></div>
-          <div class="tier st d6"><h4>Élan Brady Studio</h4><p>Gold-filled · vermeil · silk · leather · brass — accurately disclosed, never called solid gold</p></div>
-        </div>
-        <p class="st d7 tier-cap">An 18k centerpiece + a 14k connector + a silk strand — each honest at its own tier. That is what makes luxury approachable without ever compromising trust.</p>
-      </div>
-      <div class="ph st d4" style="aspect-ratio:4/5;max-height:66vh">
-        <img src="./assets/filigree-suite.webp" alt="Élan Brady gold suite — connector, earrings, bracelet and rings in solid gold" style="object-position:center">
-        <div class="cap">The gold suite · connector, earrings, bracelet, ring</div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- ================= 12 · PRODUCTION ================= -->
-<section class="slide" data-chapter="Ch 6 · Production">
+<section class="slide" data-chapter="Production">
   <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">06</span> &nbsp; Production — built for low minimums</div>
+    <div class="st d1 eyebrow">Production — built for low minimums</div>
     <h2 class="st d2">Old craft and new engineering,<br>in the same piece.</h2>
     <div class="craft">
       <div class="c st d3"><div class="where">Texas · The Studio</div><h4>Designed &amp; made by hand</h4><p>Every piece begins at Jeni's bench. Studio-made work ships from day one at MOQ of one — the highest-margin, fastest-learning tier of the house.</p></div>
@@ -624,97 +449,16 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   </div>
 </section>
 
-<!-- ================= 13 · STARTUP GATES ================= -->
-<section class="slide" data-chapter="Ch 7 · Startup Investment">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">07</span> &nbsp; What it takes to start — staged, never all at risk</div>
-    <h2 class="st d2">Three gates. <span class="big-i" style="color:var(--green)">Each one earns the next.</span></h2>
-    <div class="gates">
-      <div class="gate st d3">
-        <div class="gn">Gate 1 · Months 0–4</div>
-        <h4>Prove it</h4><div class="amt">$18–25K</div>
-        <ul>
-          <li>Connector engineering &amp; masters <b>$6–8K</b></li>
-          <li>10–12 prototypes, small-lot <b>$5–7K</b></li>
-          <li>Wear testing &amp; QA <b>$1–2K</b></li>
-          <li>Brand film, photography v1 <b>$3–4K</b></li>
-          <li>Website v1 (built in-house + AI) <b>$3–4K</b></li>
-        </ul>
-        <div class="unlock">Unlocks: a tested system and a launchable brand.</div>
-      </div>
-      <div class="gate hot st d4">
-        <div class="gn">Gate 2 · Months 4–8</div>
-        <h4>Launch</h4><div class="amt">$45–60K</div>
-        <ul>
-          <li>35-SKU inventory, low MOQ (3–8/SKU) <b>$22–30K</b></li>
-          <li>Packaging, 250 units <b>$4–5K</b></li>
-          <li>Launch photography &amp; content <b>$5–7K</b></li>
-          <li>Legal · trademark · insurance <b>$4–6K</b></li>
-          <li>Launch marketing &amp; events <b>$10–12K</b></li>
-        </ul>
-        <div class="unlock">Unlocks: revenue — the first collection on real necks.</div>
-      </div>
-      <div class="gate st d5">
-        <div class="gn">Gate 3 · Months 9–18</div>
-        <h4>Scale</h4><div class="amt">$55–75K</div>
-        <ul>
-          <li>Expand to 50 SKUs + restock winners <b>$30–40K</b></li>
-          <li>First accessories (belts, silk, leather) <b>$8–10K</b></li>
-          <li>Events &amp; collector program <b>$7–10K</b></li>
-          <li>Paid media, tested small <b>$10–15K</b></li>
-        </ul>
-        <div class="unlock">Unlocked only by Gate-2 sell-through proof.</div>
-      </div>
-    </div>
-    <div class="st d6 fineprint">Planning estimates, pre-quote · low-MOQ strategy throughout · staged release means capital is never all at risk at once · total staged: ~$120–160K</div>
-  </div>
-</section>
 
-<!-- ================= 14 · REVENUE MODEL ================= -->
-<section class="slide" data-chapter="Ch 8 · Revenue Model">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">08</span> &nbsp; Three-year revenue expectations — best-guess planning model</div>
-    <h2 class="st d2">Grown the way a collection grows.</h2>
-    <div class="rev">
-      <div class="rcol st d3 rc1">
-        <div class="rbar rb1"><div class="rv">$180–300K</div></div>
-        <div class="rmeta"><h4>Year One</h4><p>35 SKUs · launch mid-year · DTC only · AOV ≈ $425 · ~550 orders · community begins</p></div>
-      </div>
-      <div class="rcol st d4 rc2">
-        <div class="rbar rb2"><div class="rv">$520–750K</div></div>
-        <div class="rmeta"><h4>Year Two</h4><p>50 SKUs · ~30% repeat rate · connector ecosystem compounds · events &amp; first accessories</p></div>
-      </div>
-      <div class="rcol st d5 rc3">
-        <div class="rbar rb3"><div class="rv">$1.2–1.6M</div></div>
-        <div class="rmeta"><h4>Year Three</h4><p>Accessories + first clothing capsule · wholesale pilot · collector community · Marfa releases</p></div>
-      </div>
-    </div>
-    <div class="st d6 fineprint" style="margin-top:3vh">Blended gross margin target 58–65% · connectors are the highest-margin, most-repeated purchase · estimates, pre-verification — the model earns its numbers gate by gate</div>
-  </div>
-</section>
 
-<!-- ================= 15 · GROWTH PATH ================= -->
-<section class="slide center" data-chapter="Ch 9 · The Growth Path">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">09</span> &nbsp; One language, growing categories</div>
-    <h2 class="st d2">Every new category speaks<br><span class="big-i" style="color:var(--green)">the language it was born into.</span></h2>
-    <div class="gpath">
-      <div class="gstep st d3"><h5>35 SKUs</h5><p>Launch · Year 1</p></div>
-      <div class="garr st d3">→</div>
-      <div class="gstep st d4"><h5>50 SKUs</h5><p>Depth · Year 2</p></div>
-      <div class="garr st d4">→</div>
-      <div class="gstep st d5"><h5>Accessories</h5><p>Belts · Silk · Leather</p></div>
-      <div class="garr st d5">→</div>
-      <div class="gstep st d6"><h5>Clothing</h5><p>First capsule · Year 3</p></div>
-    </div>
-    <p class="st d7 lede" style="margin-top:4vh">Because the connector language is shared, a belt, a silk scarf, even a linen shirt can carry the same hardware — every category multiplies the value of every piece a collector already owns. And Marfa crowns it all: one-of-one art that keeps the house dreaming in public.</p>
-  </div>
-</section>
+
+
+
 
 <!-- ================= 16 · BRAND CODES ================= -->
-<section class="slide" data-chapter="Ch 10 · The Brand">
+<section class="slide" data-chapter="The Brand">
   <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">10</span> &nbsp; The Brand — already dressed for the part</div>
+    <div class="st d1 eyebrow">The Brand — already dressed for the part</div>
     <h2 class="st d2">The house has its codes:<br><span class="big-i" style="color:var(--green)">linen, mineral mist, atelier green, ink.</span></h2>
     <div class="codes">
       <div class="frame st d3"><img src="./assets/brand-guide.webp" alt="Élan Brady brand guide — wordmark, palette, typography, logo usage and material expression"></div>
@@ -724,57 +468,9 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   </div>
 </section>
 
-<!-- ================= 17 · THE OPEN STUDIO ================= -->
-<section class="slide" data-chapter="Ch 11 · The Open Studio">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n">11</span> &nbsp; The Open Studio</div>
-    <h2 class="st d2">The website is not a store.<br><span class="big-i" style="color:var(--green)">It's the studio with the door left open.</span></h2>
-    <div class="paths">
-      <div class="path warm st d3">
-        <h4>Wander</h4>
-        <p>Enter through the deep-green door. Hear the studio before you see it. Open drawers, gather a handful of pearls and stones into your own tray, hear the stories, build a piece — the system quietly handles what fits.</p>
-        <ul><li>Step into the studio</li><li>Pick up a handful</li><li>My Collection</li><li>Build</li><li>Drop a hint</li><li>Gather with us</li></ul>
-      </div>
-      <div class="path st d4">
-        <h4>Or buy in seconds</h4>
-        <p>The immersion is always optional. A ready-to-buy customer reaches product, price, availability, cart and checkout from anywhere in one tap. The door never blocks the till.</p>
-        <ul><li>Shop</li><li>Price &amp; availability</li><li>Cart</li><li>Checkout</li><li>Gifting</li></ul>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ================= 18 · STUDIO 52 ================= -->
-<section class="slide center" id="s-52" data-chapter="Ch 12 · Studio 52" data-dark="1">
-  <div class="inner">
-    <div class="st d1 eyebrow"><span class="n" style="color:var(--gold)">12</span> &nbsp; Studio 52 — the hidden headquarters</div>
-    <h2 class="st d2" style="color:#efeee8">Everything moves.<br><span class="big-i" style="color:var(--aqua)">Only what matters reaches the founder.</span></h2>
-    <div class="orbit-wrap st d3">
-      <div class="orbit-ring"></div><div class="orbit-ring r2"></div>
-      <div class="node" style="left:50%;top:0%">RESEARCH</div>
-      <div class="node" style="left:97%;top:33%">MANUFACTURING</div>
-      <div class="node" style="left:79%;top:92%">OPERATIONS</div>
-      <div class="node" style="left:21%;top:92%">MARKETING</div>
-      <div class="node" style="left:3%;top:33%">FINANCE</div>
-      <div class="flower">
-        <svg viewBox="0 0 100 100" width="82" height="82" aria-label="Élan Brady flower emblem">
-          <defs><linearGradient id="sage" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#8F9789"/><stop offset=".55" stop-color="#CDD3C5"/><stop offset="1" stop-color="#EBEFE6"/>
-          </linearGradient></defs>
-          <g fill="none" stroke="url(#sage)" stroke-width="2.2" stroke-linecap="round">
-            <path d="M50 50 C 40 30, 46 16, 50 12 C 54 16, 60 30, 50 50"/>
-            <path d="M50 50 C 70 40, 84 46, 88 50 C 84 54, 70 60, 50 50"/>
-            <path d="M50 50 C 60 70, 54 84, 50 88 C 46 84, 40 70, 50 50"/>
-            <path d="M50 50 C 30 60, 16 54, 12 50 C 16 46, 30 40, 50 50"/>
-            <circle cx="50" cy="50" r="5"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-    <p class="st d4 orbit-cap">A coordinated AI intelligence runs the research, vendors, numbers, calendar and follow-ups —<br>and surfaces only the few decisions that need a founder's judgment.<br>
-    <span style="font-style:normal;font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:.2em;color:rgba(239,238,232,.5)">SO THE FOUNDER'S HANDS STAY ON THE WORK — NOT THE PAPERWORK</span></p>
-  </div>
-</section>
+
+
 
 <!-- ================= 19 · THE ASK ================= -->
 <section class="slide center" id="s-ask" data-chapter="The First Yes">
@@ -810,32 +506,13 @@ body.dark-chrome .navbtns button{background:rgba(18,22,18,.55);
   </div>
 </section>
 
-<!-- ================= 20 · CLOSING ================= -->
-<section class="slide center" data-chapter="Closing">
-  <div class="inner close-lines">
-    <h2><span class="st d2" style="display:block;margin-bottom:2.4vh">Some brands make jewelry.</span>
-        <span class="st d4" style="display:block;margin-bottom:2.4vh">Some brands sell luxury.</span>
-        <span class="st d6" style="display:block"><em>Élan Brady gathers stories.</em></span></h2>
-  </div>
-</section>
 
-<!-- ================= 21 · FINAL MARK ================= -->
-<section class="slide center" data-chapter="">
-  <div class="inner">
-    <div class="st d2">
-      <div class="wordmark">
-        <span class="elan"><span class="e">E<svg viewBox="0 0 40 16"><path d="M2 11 C 9 3, 15 3, 21 9 S 33 14, 38 6" fill="none" stroke="#171A18" stroke-width="1.6" stroke-linecap="round"/></svg></span>LAN</span>
-        <span class="brady">Brady</span>
-        <span class="atelier">ATELIER&nbsp;&nbsp;TX</span>
-      </div>
-    </div>
-    <div class="st d5 quiet" style="margin-top:6vh">Come see what belongs together</div>
-  </div>
-</section>
+
+
 
 </div>
 
-<div class="chrome hidden" id="chrome">
+<div class="chrome" id="chrome">
   <div class="ch-label" id="chLabel"></div>
   <div class="progress"><div class="bar" id="bar"></div></div>
   <div class="ch-label r" id="counter"></div>
@@ -856,13 +533,12 @@ window.onerror=function(msg){
   d.textContent='Something went wrong loading the presentation: '+msg;
   document.body.appendChild(d);
 };
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- deck ---------- */
 const slides=[...document.querySelectorAll('.slide')];
 const bar=document.getElementById('bar'),chLabel=document.getElementById('chLabel'),
       counter=document.getElementById('counter'),chrome=document.getElementById('chrome');
-let i=0, filmDone=false, filmTimers=[];
+let i=0;
 
 function show(n){
   n=Math.max(0,Math.min(slides.length-1,n));
@@ -874,40 +550,7 @@ function show(n){
   chLabel.textContent=slides[i].dataset.chapter||'';
   counter.textContent=(i+1)+' / '+slides.length;
   document.body.classList.toggle('dark-chrome',slides[i].dataset.dark==='1');
-  chrome.classList.toggle('hidden', i===0);
 }
-
-/* ---------- film timeline ---------- */
-const f=[1,2,3,4,5].map(n=>document.getElementById('f'+n));
-let filmScene=0, filmManual=false;
-function setScene(k){
-  filmScene=k;
-  f.forEach((el,idx)=>el.classList.toggle('on',idx===k));
-  document.getElementById('film').classList.toggle('lightmode',k===4);
-  if(k===2){setTimeout(()=>document.getElementById('f3').classList.add('open'),1300);}
-}
-function runFilm(){
-  setScene(0);
-  const T=(ms,fn)=>filmTimers.push(setTimeout(()=>{if(!filmManual)fn();},ms));
-  T(6500,()=>setScene(1));
-  T(13500,()=>setScene(2));
-  T(21500,()=>setScene(3));
-  T(29500,()=>setScene(4));
-  T(37000,endFilm);
-}
-function stepFilm(){
-  filmManual=true;
-  filmTimers.forEach(clearTimeout);filmTimers=[];
-  if(filmScene>=4){endFilm();return;}
-  setScene(filmScene+1);
-}
-function endFilm(){
-  if(filmDone)return;
-  filmDone=true;
-  filmTimers.forEach(clearTimeout);filmTimers=[];
-  show(1);
-}
-document.getElementById('skipBtn').addEventListener('click',e=>{e.stopPropagation();endFilm();});
 
 /* ---------- nav ----------
    Three redundant input paths, deduped by timestamp, because embedded
@@ -915,8 +558,8 @@ document.getElementById('skipBtn').addEventListener('click',e=>{e.stopPropagatio
    1. explicit ←/→ buttons (work everywhere JS runs)
    2. pointerup taps/swipes on the document
    3. plain click as a final fallback, plus keyboard. */
-function next(){ if(i===0){stepFilm();return;} show(i+1); }
-function prev(){ if(i<=1){return;} show(i-1); }
+function next(){ show(i+1); }
+function prev(){ if(i>0)show(i-1); }
 let lastNav=0;
 function doNext(){const n=Date.now();if(n-lastNav<350)return;lastNav=n;next();}
 function doPrev(){const n=Date.now();if(n-lastNav<350)return;lastNav=n;prev();}
@@ -926,7 +569,7 @@ document.getElementById('btnPrev').addEventListener('click',e=>{e.stopPropagatio
 let px=null,py=null;
 document.addEventListener('pointerdown',e=>{px=e.clientX;py=e.clientY;},{passive:true});
 document.addEventListener('pointerup',e=>{
-  if(e.target.closest('.skip,.navbtns')||px===null)return;
+  if(e.target.closest('.navbtns')||px===null)return;
   const dx=e.clientX-px, dy=e.clientY-py; px=py=null;
   if(dx>60&&Math.abs(dy)<80){doPrev();return;}                 /* swipe right = back */
   if(Math.abs(dx)<14&&Math.abs(dy)<14){                        /* plain tap */
@@ -934,19 +577,18 @@ document.addEventListener('pointerup',e=>{
   }
 },{passive:true});
 document.addEventListener('click',e=>{
-  if(e.target.closest('.skip,.navbtns'))return;
+  if(e.target.closest('.navbtns'))return;
   if(e.clientX<innerWidth*.16&&i>0)doPrev();else doNext();
 });
 document.addEventListener('keydown',e=>{
   if(['ArrowRight','ArrowDown',' ','Enter','PageDown'].includes(e.key)){e.preventDefault();next();}
   if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();prev();}
-  if(e.key==='Home'){filmDone=true;filmTimers.forEach(clearTimeout);show(1);}
+  if(e.key==='Home')show(0);
   if(e.key==='End')show(slides.length-1);
 });
 
 /* boot */
 show(0);
-if(reduced){ setScene(0); } else { runFilm(); }
 })();
 </script>
 </body>
